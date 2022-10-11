@@ -11,15 +11,15 @@ public:
 
 	bool loadFromFile(std::string pathTo, SDL_Renderer* rederer);
 
-	void render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip = nullptr);
+	void render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip = nullptr) const;
 
 	void free();
 
-	int getWidth();
+	int getWidth() const;
 
-	int getHeight();
+	int getHeight() const;
 
-private:
+protected:
 	SDL_Texture* sprTexture;
 
 	int width;

@@ -3,10 +3,12 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+
+#include "AnimSprite.h"
 #include "Sprite.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+constexpr int SCREEN_WIDTH = 800;
+constexpr int SCREEN_HEIGHT = 600;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
@@ -74,7 +76,7 @@ bool init()
 		return false;
 	}
 
-	defaultRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	defaultRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (defaultRenderer == nullptr)
 	{
 		printf("Failed to create renderer! SDL Error: %s\n", SDL_GetError());
@@ -97,6 +99,7 @@ void close()
 {
 	SDL_DestroyWindow(window);
 	window = nullptr;
+	bg = nullptr;
 	defaultRenderer = nullptr;
 
 	IMG_Quit();
@@ -113,46 +116,55 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	Sprite amogus, godot;
+	Sprite amogus;
+	Sprite godot;
+	AnimSprite glider;
 
 	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
+		return -2;
 	}
 
 	if (!godot.loadFromFile("res/icon.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
+		return -2;
 	}
 
-	//delta time
+	constexpr int GLIDER_FRAME_SIZE = 48;
+	constexpr int GLIDER_FRAME_COUNT = 4;
+	if (!glider.loadFromFile("res/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
+	{
+		printf("Failed to load animated sprite texture!\n");
+		return -3;
+	}
+
+	// Delta time
 	Uint64 now = SDL_GetPerformanceCounter();
-	Uint64 last = 0;
-	double _delta = 0;
+	double deltaTime;
 
-	SDL_Rect SpriteRect;
-	SpriteRect.x = 64;
-	SpriteRect.y = 64;
-
-	//keep window
-	SDL_Event event;
-	bool quit = false;
+	// Animation variables
 	int offset = 128;
 	bool returning = false;
+	Uint64 gliderFrames = 0;
+
+	SDL_Event event;
 	bool run = true;
-	// main game loop
+
+	// Main game loop
 	while (run) 
 	{
+		//keep window
 		SDL_PollEvent(&event);
 		if (event.type == SDL_QUIT) run = false;
 
 		//calculate delta
 		{
-			last = now;
+			Uint64 last = now;
 			now = SDL_GetPerformanceCounter();
-			_delta = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
+			deltaTime = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
 		}
 
 		// change sprite offset to simulate movement
-		
 		if (offset >= 128)
 		{
 			returning = true;
@@ -168,8 +180,10 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(defaultRenderer);
 
 		//Render sprites
+		constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
 		amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
-		godot.render(64, 64, defaultRenderer);
+		godot.render(320, 480, defaultRenderer);
+		glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
@@ -182,4 +196,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
