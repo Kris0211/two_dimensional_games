@@ -3,6 +3,7 @@
 #include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Sprite.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -20,7 +21,7 @@ SDL_Surface* loadSurface(std::string pathTo)
 {
 	SDL_Surface* optimizedSurface = nullptr;
 
-	SDL_Surface* loadedSurface = SDL_LoadBMP(pathTo.c_str());
+	SDL_Surface* loadedSurface = IMG_Load(pathTo.c_str());
 	if (loadedSurface == nullptr)
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", pathTo.c_str(), SDL_GetError());
@@ -45,23 +46,12 @@ SDL_Surface* loadSurface(std::string pathTo)
  */
 SDL_Texture* loadTexture(std::string pathTo)
 {
-	SDL_Texture* texture = nullptr;
-
 	// load image
-	SDL_Surface* loadedSurface = IMG_Load(pathTo.c_str());
-	if (loadedSurface == nullptr) {
-		printf("Unable to load image %s!\nSDL_image Error: %s\n", pathTo.c_str(), IMG_GetError());
-	}
-
-	// create texture
-	texture = SDL_CreateTextureFromSurface(defaultRenderer, loadedSurface);
+	SDL_Texture* texture = IMG_LoadTexture(defaultRenderer, pathTo.c_str());
 	if (texture == nullptr) {
 		printf("Unable to create texture from %s!\nSDL Error: %s\n", pathTo.c_str(), SDL_GetError());
 	}
-
-	// free surface since it is no longer needed
-	SDL_FreeSurface(loadedSurface);
-
+	
 	return texture;
 }
 
@@ -91,11 +81,13 @@ bool init()
 		return false;
 	}
 
-	bg = SDL_GetWindowSurface(window);
-	SDL_FillRect(bg, 0, SDL_MapRGB(bg->format, 0x48, 0x72, 0x8C));
-	SDL_UpdateWindowSurface(window);
-
 	return true;
+}
+
+void updateSpritePosition(SDL_Rect& rect, int x, int y)
+{
+	rect.x = x;
+	rect.y = y;
 }
 
 /**
@@ -113,30 +105,22 @@ void close()
 
 int main(int argc, char* argv[])
 {
-	srand(time(nullptr));  // NOLINT(clang-diagnostic-shorten-64-to-32)
-	
+	srand(time(NULL));
+
 	if (!init())
 	{
 		printf("Initialization failed: %s\n", SDL_GetError());
 		return -1;
 	}
 
-	SDL_Rect SpriteRect;
-	SpriteRect.x = 64;
-	SpriteRect.y = 64;
+	Sprite amogus, godot;
 
-	SDL_Texture* amogus = loadTexture("res/sus.png");
-	if (amogus == nullptr)
-	{
-		printf("Failed to load texture image!\n");
-		return 3;
+	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
 	}
 
-	SDL_Texture* godot = loadTexture("res/icon.png");
-	if (godot == nullptr)
-	{
-		printf("Failed to load texture image!\n");
-		return 3;
+	if (!godot.loadFromFile("res/icon.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
 	}
 
 	//delta time
@@ -144,33 +128,58 @@ int main(int argc, char* argv[])
 	Uint64 last = 0;
 	double _delta = 0;
 
+	SDL_Rect SpriteRect;
+	SpriteRect.x = 64;
+	SpriteRect.y = 64;
+
 	//keep window
 	SDL_Event event;
 	bool quit = false;
-	while (!quit) {
+	int offset = 128;
+	bool returning = false;
+	bool run = true;
+	// main game loop
+	while (run) 
+	{
+		SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) run = false;
 
-		last = now;
-		now = SDL_GetPerformanceCounter();
-		_delta = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
-
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				quit = true;
-			}
-
-			SDL_RenderClear(defaultRenderer); //Clears the screen
-			SDL_RenderCopy(defaultRenderer, amogus, 0, 0); //Renders textures to sceen
-			SDL_RenderCopy(defaultRenderer, godot, 0, 0);
-			SDL_RenderPresent(defaultRenderer); //Updates screen after render
+		//calculate delta
+		{
+			last = now;
+			now = SDL_GetPerformanceCounter();
+			_delta = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
 		}
+
+		// change sprite offset to simulate movement
+		
+		if (offset >= 128)
+		{
+			returning = true;
+		}
+		else if (offset <= 0)
+		{
+			returning = false;
+		}
+		offset += returning ? -1 : 1;
+
+		//Background color
+		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
+		SDL_RenderClear(defaultRenderer);
+
+		//Render sprites
+		amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
+		godot.render(64, 64, defaultRenderer);
+
+		//Updates screen after render
+		SDL_RenderPresent(defaultRenderer);
 	}
-
-	SDL_DestroyTexture(godot);
-	godot = nullptr;
-	SDL_DestroyTexture(amogus);
-	godot = nullptr;
-
+	
+	// Clean up before closing
+	godot.free();
+	amogus.free();
 	close();
 
 	return 0;
 }
+
