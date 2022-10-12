@@ -5,7 +5,9 @@
 #include <SDL_image.h>
 
 #include "AnimSprite.h"
+#include "PlayerCharacter.h"
 #include "Sprite.h"
+#include "Vector2D.h"
 
 constexpr int SCREEN_WIDTH = 800;
 constexpr int SCREEN_HEIGHT = 600;
@@ -118,7 +120,13 @@ int main(int argc, char* argv[])
 
 	Sprite amogus;
 	Sprite godot;
+	Sprite qwadrat;
+	Sprite cirkle;
+
 	AnimSprite glider;
+
+	PlayerCharacter player1(&qwadrat, Vector2D(80, 60));
+	PlayerCharacter player2(&cirkle, Vector2D(400, 300));
 
 	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
@@ -126,6 +134,16 @@ int main(int argc, char* argv[])
 	}
 
 	if (!godot.loadFromFile("res/icon.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!qwadrat.loadFromFile("res/red.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!cirkle.loadFromFile("res/rednt.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -181,15 +199,19 @@ int main(int argc, char* argv[])
 
 		//Render sprites
 		constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
-		amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
-		godot.render(320, 480, defaultRenderer);
-		glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
+		//amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
+		//godot.render(320, 480, defaultRenderer);
+		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
+
+		player1.render(defaultRenderer);
+		player2.render(defaultRenderer);
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
+	glider.free();
 	godot.free();
 	amogus.free();
 	close();

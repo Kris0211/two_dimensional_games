@@ -21,11 +21,15 @@
   <ItemGroup>
     <ClCompile Include="AnimSprite.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimSprite.h" />
+    <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Vector2D.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
