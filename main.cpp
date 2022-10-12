@@ -125,8 +125,8 @@ int main(int argc, char* argv[])
 
 	AnimSprite glider;
 
-	PlayerCharacter player1(&qwadrat, Vector2D(80, 60));
-	PlayerCharacter player2(&cirkle, Vector2D(400, 300));
+	PlayerCharacter player1(&qwadrat, Vector2D(250, 300));
+	PlayerCharacter player2(&cirkle, Vector2D(500, 300));
 
 	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");

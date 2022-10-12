@@ -19,29 +19,15 @@ bool Sprite::loadFromFile(std::string pathTo, SDL_Renderer* renderer)
 	free();
 
 	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(pathTo.c_str());
-	if (loadedSurface == nullptr)
-	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", pathTo.c_str(), IMG_GetError());
-		return false;
-	}
-
-	//Color key image
-	SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-
-	SDL_Texture* newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+	SDL_Texture* newTexture = IMG_LoadTexture(renderer, pathTo.c_str());
 	if (newTexture == nullptr)
 	{
-		printf("Unable to create texture from %s! SDL Error: %s\n", pathTo.c_str(), SDL_GetError());
+		printf("Unable to load texture from %s! SDL Error: %s\n", pathTo.c_str(), SDL_GetError());
 		return false;
 	}
 
 	//Get image dimensions
-	width = loadedSurface->w;
-	height = loadedSurface->h;
-	
-	//Get rid of old loaded surface
-	SDL_FreeSurface(loadedSurface);
+	SDL_QueryTexture(newTexture, nullptr, nullptr, &width, &height);
 	
 	//Return success
 	sprTexture = newTexture;
