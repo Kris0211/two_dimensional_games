@@ -128,6 +128,8 @@ int main(int argc, char* argv[])
 	PlayerCharacter player1(&qwadrat, Vector2D(250, 300));
 	PlayerCharacter player2(&cirkle, Vector2D(500, 300));
 
+	player1.setMovementSpeed(5);
+
 	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
@@ -169,7 +171,7 @@ int main(int argc, char* argv[])
 	bool run = true;
 
 	// Main game loop
-	while (run) 
+	while (run)
 	{
 		//keep window
 		SDL_PollEvent(&event);
@@ -196,6 +198,65 @@ int main(int argc, char* argv[])
 		//Background color
 		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
 		SDL_RenderClear(defaultRenderer);
+
+		//Input processing
+		Vector2D playerOneInput(0, 0);
+		Vector2D playerTwoInput(0, 0);
+
+		SDL_Keycode keyPress = event.key.keysym.sym;
+		if (event.type = SDL_KEYDOWN) {
+			if (keyPress == SDLK_LEFT)
+			{
+				playerOneInput.x = -1;
+			}
+			if (keyPress == SDLK_RIGHT)
+			{
+				playerOneInput.x = 1;
+			}
+			if (keyPress == SDLK_UP)
+			{
+				playerOneInput.y = -1;
+			}
+			if (keyPress == SDLK_DOWN)
+			{
+				playerOneInput.y = 1;
+			}
+		}
+		else if (event.type = SDL_KEYUP) {
+			if (keyPress == SDLK_LEFT)
+			{
+				if (playerOneInput.x < 0)
+				{
+					playerOneInput.x = 0;
+				}
+			}
+			if (keyPress == SDLK_RIGHT)
+			{
+				if (playerOneInput.x > 0)
+				{
+					playerOneInput.x = 0;
+				}
+			}
+			if (keyPress == SDLK_UP)
+			{
+				if (playerOneInput.y < 0)
+				{
+					playerOneInput.y = 0;
+				}
+			}
+			if (keyPress == SDLK_DOWN)
+			{
+				if (playerOneInput.y > 0)
+				{
+					playerOneInput.y = 0;
+				}
+			}
+		}
+		if (playerOneInput != Vector2D(0, 0))
+		{
+			playerOneInput.normalize();
+		}
+		player1.move(playerOneInput);
 
 		//Render sprites
 		constexpr int GLIDER_ANIM_SPEED_DELAY = 30;

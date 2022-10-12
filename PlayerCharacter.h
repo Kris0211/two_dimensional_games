@@ -27,6 +27,9 @@ public:
 
 	void setSprite(Sprite* sprite);
 
+	void setMovementSpeed(const int multiplier);
+
+	int getMovementSpeed();;
 
 private:
 	PlayerCharacter();
@@ -37,4 +40,6 @@ private:
 	Vector2D position;
 	
 	Vector2D velocity;
+
+	int speedMultiplier;
 };

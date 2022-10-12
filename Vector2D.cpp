@@ -10,23 +10,33 @@ Vector2D::Vector2D(const Vector2D& v) : x(v.x), y(v.y) {}
 
 Vector2D::~Vector2D() {}
 
-Vector2D Vector2D::operator+(const Vector2D& v)
+bool Vector2D::operator==(const Vector2D& v)
+{
+	return this->x == v.x && this->y == v.y;
+}
+
+bool Vector2D::operator!=(const Vector2D& v)
+{
+	return this->x != v.x || this->y != v.y;
+}
+
+Vector2D Vector2D::operator+(const Vector2D &v)
 {
 	return Vector2D(x + v.x, y + v.y);
 }
 
-Vector2D Vector2D::operator-(const Vector2D& v)
+Vector2D Vector2D::operator-(const Vector2D &v)
 {
 	return Vector2D(x - v.x, y - v.y);
 }
 
-void Vector2D::operator+=(const Vector2D& v)
+void Vector2D::operator+=(const Vector2D &v)
 {
 	this->x += v.x;
 	this->y += v.y;
 }
 
-void Vector2D::operator-=(const Vector2D& v)
+void Vector2D::operator-=(const Vector2D &v)
 {
 	this->x -= v.x;
 	this->y -= v.y;
@@ -99,7 +109,3 @@ float Vector2D::angleBetween(const Vector2D& v1, const Vector2D& v2)
 {
 	return acos(Vector2D::dotProduct(v1, v2) / (v1.length() * v2.length()));
 }
-
-int Vector2D::getX() { return x; }
-
-int Vector2D::getY() { return y; }
