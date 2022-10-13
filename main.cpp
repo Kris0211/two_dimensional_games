@@ -169,13 +169,73 @@ int main(int argc, char* argv[])
 
 	SDL_Event event;
 	bool run = true;
-
+	
 	// Main game loop
 	while (run)
 	{
-		//keep window
 		SDL_PollEvent(&event);
-		if (event.type == SDL_QUIT) run = false;
+		if (event.type != 0)
+		{
+			// Close game on quit
+			if (event.type == SDL_QUIT) run = false;
+
+			//Input processing
+			Vector2D playerOneInput(0, 0);
+			Vector2D playerTwoInput(0, 0);
+
+			const Uint8* keyPress;
+			if (event.type == SDL_KEYDOWN) {
+				keyPress = SDL_GetKeyboardState(NULL);
+				if (keyPress[SDL_SCANCODE_LEFT])
+				{
+					playerOneInput.x = -1;
+					printf("LEFT_PRESSED\n");
+				}
+				if (keyPress[SDL_SCANCODE_RIGHT])
+				{
+					playerOneInput.x = 1;
+					printf("RIGHT_PRESSED\n");
+				}
+				if (keyPress[SDL_SCANCODE_UP])
+				{
+					playerOneInput.y = -1;
+					printf("UP_PRESSED\n");
+				}
+				if (keyPress[SDL_SCANCODE_DOWN])
+				{
+					playerOneInput.y = 1;
+					printf("DOWN_PRESSED\n");
+				}
+			}
+			if (event.type == SDL_KEYUP) {
+				keyPress = SDL_GetKeyboardState(NULL);
+				if (keyPress[SDL_SCANCODE_LEFT])
+				{
+					playerOneInput.x = 0;
+					printf("LEFT_RELEASED\n");
+				}
+				if (keyPress[SDL_SCANCODE_RIGHT])
+				{
+					playerOneInput.x = 0;
+					printf("RIGHT_RELEASED\n");
+				}
+				if (keyPress[SDL_SCANCODE_UP])
+				{
+					playerOneInput.y = 0;
+					printf("UP_RELEASED\n");
+				}
+				if (keyPress[SDL_SCANCODE_DOWN])
+				{
+					playerOneInput.y = 0;
+					printf("DOWN_RELEASED\n");
+				}
+			}
+			if (playerOneInput != Vector2D(0, 0))
+			{
+				playerOneInput.normalize();
+			}
+			player1.move(playerOneInput);
+		}
 
 		//calculate delta
 		{
@@ -199,67 +259,8 @@ int main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
 		SDL_RenderClear(defaultRenderer);
 
-		//Input processing
-		Vector2D playerOneInput(0, 0);
-		Vector2D playerTwoInput(0, 0);
-
-		SDL_Keycode keyPress = event.key.keysym.sym;
-		if (event.type = SDL_KEYDOWN) {
-			if (keyPress == SDLK_LEFT)
-			{
-				playerOneInput.x = -1;
-			}
-			if (keyPress == SDLK_RIGHT)
-			{
-				playerOneInput.x = 1;
-			}
-			if (keyPress == SDLK_UP)
-			{
-				playerOneInput.y = -1;
-			}
-			if (keyPress == SDLK_DOWN)
-			{
-				playerOneInput.y = 1;
-			}
-		}
-		else if (event.type = SDL_KEYUP) {
-			if (keyPress == SDLK_LEFT)
-			{
-				if (playerOneInput.x < 0)
-				{
-					playerOneInput.x = 0;
-				}
-			}
-			if (keyPress == SDLK_RIGHT)
-			{
-				if (playerOneInput.x > 0)
-				{
-					playerOneInput.x = 0;
-				}
-			}
-			if (keyPress == SDLK_UP)
-			{
-				if (playerOneInput.y < 0)
-				{
-					playerOneInput.y = 0;
-				}
-			}
-			if (keyPress == SDLK_DOWN)
-			{
-				if (playerOneInput.y > 0)
-				{
-					playerOneInput.y = 0;
-				}
-			}
-		}
-		if (playerOneInput != Vector2D(0, 0))
-		{
-			playerOneInput.normalize();
-		}
-		player1.move(playerOneInput);
-
 		//Render sprites
-		constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
+		//constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
 		//amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
 		//godot.render(320, 480, defaultRenderer);
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
