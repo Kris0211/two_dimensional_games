@@ -167,9 +167,13 @@ int main(int argc, char* argv[])
 	bool returning = false;
 	Uint64 gliderFrames = 0;
 
+	// Player velocity vector
+	Vector2D playerOneInput(0, 0);
+	Vector2D playerTwoInput(0, 0);
+
 	SDL_Event event;
 	bool run = true;
-	
+
 	// Main game loop
 	while (run)
 	{
@@ -180,9 +184,6 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT) run = false;
 
 			//Input processing
-			Vector2D playerOneInput(0, 0);
-			Vector2D playerTwoInput(0, 0);
-
 			const Uint8* keyPress;
 			if (event.type == SDL_KEYDOWN) {
 				keyPress = SDL_GetKeyboardState(NULL);
@@ -207,7 +208,7 @@ int main(int argc, char* argv[])
 					printf("DOWN_PRESSED\n");
 				}
 			}
-			if (event.type == SDL_KEYUP) {
+			else if (event.type == SDL_KEYUP) {
 				keyPress = SDL_GetKeyboardState(NULL);
 				if (keyPress[SDL_SCANCODE_LEFT])
 				{
