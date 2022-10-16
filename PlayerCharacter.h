@@ -7,32 +7,30 @@ class PlayerCharacter
 public:
 	~PlayerCharacter();
 	
-	PlayerCharacter(Sprite* sprite, Vector2D pos);
+	PlayerCharacter(Sprite* sprite, Vector2D pos, const float speed = 1.0);
 	
-	PlayerCharacter(Sprite* sprite, int x, int y);
+	PlayerCharacter(Sprite* sprite, float x, float y, const float speed = 1.0);
 
 	void free();
 
-	void move(Vector2D &vel);
+	void move(double delta);
 
-	void smoothMove(Vector2D &vel, float smooth = 0.5);
+	void smoothMove(double delta, float smooth = 0.9);
 
-	void render(SDL_Renderer* renderer, SDL_Rect* clip = nullptr);
+	void render(SDL_Renderer* renderer, SDL_Rect* clip = nullptr) const;
 
 	Vector2D getPosition();
 
 	void setPosition(Vector2D &pos);
 
-	void setPosition(int x, int y);
+	void setPosition(float x, float y);
 
 	void setSprite(Sprite* sprite);
 
-	void setMovementSpeed(const int multiplier);
+	void setMovementSpeed(const float multiplier);
 
-	int getMovementSpeed();;
+	float getMovementSpeed() const;
 
-private:
-	PlayerCharacter();
 
 private:
 	Sprite* playerSprite;
@@ -41,5 +39,5 @@ private:
 	
 	Vector2D velocity;
 
-	int speedMultiplier;
+	float speedMultiplier;
 };

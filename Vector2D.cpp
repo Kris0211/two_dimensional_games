@@ -4,30 +4,18 @@
 
 Vector2D::Vector2D() : x(0), y(0){}
 
-Vector2D::Vector2D(int x, int y) : x(x), y(y) {}
+Vector2D::Vector2D(float x, float y) : x(x), y(y) {}
 
 Vector2D::Vector2D(const Vector2D& v) : x(v.x), y(v.y) {}
 
-Vector2D::~Vector2D() {}
-
-bool Vector2D::operator==(const Vector2D& v)
+Vector2D Vector2D::operator+(const Vector2D &v) const
 {
-	return this->x == v.x && this->y == v.y;
+	return {x + v.x, y + v.y};
 }
 
-bool Vector2D::operator!=(const Vector2D& v)
+Vector2D Vector2D::operator-(const Vector2D &v) const
 {
-	return this->x != v.x || this->y != v.y;
-}
-
-Vector2D Vector2D::operator+(const Vector2D &v)
-{
-	return Vector2D(x + v.x, y + v.y);
-}
-
-Vector2D Vector2D::operator-(const Vector2D &v)
-{
-	return Vector2D(x - v.x, y - v.y);
+	return {x - v.x, y - v.y};
 }
 
 void Vector2D::operator+=(const Vector2D &v)
@@ -42,31 +30,28 @@ void Vector2D::operator-=(const Vector2D &v)
 	this->y -= v.y;
 }
 
-Vector2D Vector2D::operator*(int f)
+Vector2D Vector2D::operator*(float f) const
 {
-	return Vector2D(x * f, y * f);
+	return {x * f, y * f};
 }
 
-Vector2D Vector2D::operator/(int f)
+Vector2D Vector2D::operator/(float f) const
 {
 	if (f != 0.0f)
 	{
 		f = 1 / f;
-		return Vector2D(x * f, y * f);
+		return {x * f, y * f};
 	}
-	else
-	{
-		throw std::runtime_error("Math erorr: Cannot divide by zero\n");
-	}
+	else throw std::runtime_error("Math error: Cannot divide by zero\n");
 }
 
-void Vector2D::operator*=(int f)
+void Vector2D::operator*=(const float f)
 {
 	x *= f;
 	y *= f;
 }
 
-void Vector2D::operator/=(int f)
+void Vector2D::operator/=(float f)
 {
 	if (f != 0.0f)
 	{
@@ -74,15 +59,12 @@ void Vector2D::operator/=(int f)
 		x *= f;
 		y *= f;
 	}
-	else
-	{
-		throw std::runtime_error("Math erorr: Cannot divide by zero\n");
-	}
+	else throw std::runtime_error("Math error: Cannot divide by zero\n");
 }
 
 float Vector2D::length() const
 {
-	return (float)sqrt(
+	return sqrt(
 		(this->x * this->x) +
 		(this->y * this->y));
 }
@@ -90,11 +72,10 @@ float Vector2D::length() const
 void Vector2D::normalize()
 {
 	float n = this->length();
-	if (n != 0) {
+	if (n != 0.0) {
 		this->x /= n;
 		this->y /= n;
 	}
-	else throw std::runtime_error("Math erorr: Cannot divide by zero\n");
 }
 
 float Vector2D::dotProduct(const Vector2D& v1, const Vector2D& v2)

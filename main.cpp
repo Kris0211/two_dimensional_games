@@ -125,10 +125,11 @@ int main(int argc, char* argv[])
 
 	AnimSprite glider;
 
-	PlayerCharacter player1(&qwadrat, Vector2D(250, 300));
-	PlayerCharacter player2(&cirkle, Vector2D(500, 300));
+	PlayerCharacter player1(&qwadrat, Vector2D(250.0, 300.0));
+	PlayerCharacter player2(&cirkle, Vector2D(500.0, 300.0));
 
-	player1.setMovementSpeed(5);
+	player1.setMovementSpeed(2.0);
+	player2.setMovementSpeed(2.0);
 
 	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
@@ -165,11 +166,8 @@ int main(int argc, char* argv[])
 	// Animation variables
 	int offset = 128;
 	bool returning = false;
-	Uint64 gliderFrames = 0;
+	//Uint64 gliderFrames = 0;
 
-	// Player velocity vector
-	Vector2D playerOneInput(0, 0);
-	Vector2D playerTwoInput(0, 0);
 
 	SDL_Event event;
 	bool run = true;
@@ -177,76 +175,38 @@ int main(int argc, char* argv[])
 	// Main game loop
 	while (run)
 	{
-		SDL_PollEvent(&event);
-		if (event.type != 0)
+		//Calculate delta
+		Uint64 last = now;
+		now = SDL_GetPerformanceCounter();
+		deltaTime = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
+
+
+		//Input processing
+		while (SDL_PollEvent(&event))
 		{
+			if (event.type == SDL_KEYDOWN)
+			{
+				printf("%s PRESSED\n", SDL_GetScancodeName(event.key.keysym.scancode));
+			}
+			if (event.type == SDL_KEYUP)
+			{
+				printf("%s RELEASED\n", SDL_GetScancodeName(event.key.keysym.scancode));
+			}
+			if (event.type == SDL_MOUSEMOTION)
+			{
+				int x, y;
+				SDL_GetMouseState(&x, &y);
+				printf("Mouse position: [x:%d] [y:%d]\n", x, y);
+			}
 			// Close game on quit
 			if (event.type == SDL_QUIT) run = false;
-
-			//Input processing
-			const Uint8* keyPress;
-			if (event.type == SDL_KEYDOWN) {
-				keyPress = SDL_GetKeyboardState(NULL);
-				if (keyPress[SDL_SCANCODE_LEFT])
-				{
-					playerOneInput.x = -1;
-					printf("LEFT_PRESSED\n");
-				}
-				if (keyPress[SDL_SCANCODE_RIGHT])
-				{
-					playerOneInput.x = 1;
-					printf("RIGHT_PRESSED\n");
-				}
-				if (keyPress[SDL_SCANCODE_UP])
-				{
-					playerOneInput.y = -1;
-					printf("UP_PRESSED\n");
-				}
-				if (keyPress[SDL_SCANCODE_DOWN])
-				{
-					playerOneInput.y = 1;
-					printf("DOWN_PRESSED\n");
-				}
-			}
-			else if (event.type == SDL_KEYUP) {
-				keyPress = SDL_GetKeyboardState(NULL);
-				if (keyPress[SDL_SCANCODE_LEFT])
-				{
-					playerOneInput.x = 0;
-					printf("LEFT_RELEASED\n");
-				}
-				if (keyPress[SDL_SCANCODE_RIGHT])
-				{
-					playerOneInput.x = 0;
-					printf("RIGHT_RELEASED\n");
-				}
-				if (keyPress[SDL_SCANCODE_UP])
-				{
-					playerOneInput.y = 0;
-					printf("UP_RELEASED\n");
-				}
-				if (keyPress[SDL_SCANCODE_DOWN])
-				{
-					playerOneInput.y = 0;
-					printf("DOWN_RELEASED\n");
-				}
-			}
-			if (playerOneInput != Vector2D(0, 0))
-			{
-				playerOneInput.normalize();
-			}
-			player1.move(playerOneInput);
 		}
 
-		//calculate delta
-		{
-			Uint64 last = now;
-			now = SDL_GetPerformanceCounter();
-			deltaTime = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
-		}
-
-		// change sprite offset to simulate movement
-		if (offset >= 128)
+		player1.smoothMove(deltaTime);
+		player2.move(deltaTime);
+		
+		//Change sprite offset to simulate movement
+		/*if (offset >= 128)
 		{
 			returning = true;
 		}
@@ -254,7 +214,9 @@ int main(int argc, char* argv[])
 		{
 			returning = false;
 		}
-		offset += returning ? -1 : 1;
+		offset += returning ? -1 : 1;*/
+
+		//RENDERING
 
 		//Background color
 		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
@@ -274,9 +236,11 @@ int main(int argc, char* argv[])
 	}
 	
 	// Clean up before closing
-	glider.free();
-	godot.free();
-	amogus.free();
+	player2.free();
+	player1.free();
+	//glider.free();
+	//godot.free();
+	//amogus.free();
 	close();
 
 	return 0;
