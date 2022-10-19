@@ -44,7 +44,7 @@ void PlayerCharacter::smoothMove(double delta, float smooth)
 	int x, y;
 	SDL_GetMouseState(&x, &y);
 	Vector2D target(x - position.x, y - position.y);
-	target *= speedMultiplier * delta;
+	target *= speedMultiplier;// *delta;
 	velocity = target * static_cast<float>(1.0 - smooth) + velocity * smooth;
 	position += velocity;
 }

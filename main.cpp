@@ -1,16 +1,23 @@
 #include <cstdio>
 #include <chrono>
 #include <string>
+#include <fstream>
+
 #include <SDL.h>
 #include <SDL_image.h>
 
 #include "AnimSprite.h"
 #include "PlayerCharacter.h"
 #include "Sprite.h"
+#include "TileSet.h"
 #include "Vector2D.h"
 
-constexpr int SCREEN_WIDTH = 800;
-constexpr int SCREEN_HEIGHT = 600;
+constexpr int TILE_SIZE = 64;
+constexpr int TILEMAP_WIDTH = 7;
+constexpr int TILEMAP_HEIGHT = 7;
+const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
+constexpr int SCREEN_WIDTH = TILEMAP_WIDTH * TILE_SIZE;
+constexpr int SCREEN_HEIGHT = TILEMAP_HEIGHT * TILE_SIZE;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
@@ -71,7 +78,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 1", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 3", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -86,12 +93,6 @@ bool init()
 	}
 
 	return true;
-}
-
-void updateSpritePosition(SDL_Rect& rect, int x, int y)
-{
-	rect.x = x;
-	rect.y = y;
 }
 
 /**
@@ -120,40 +121,62 @@ int main(int argc, char* argv[])
 
 	Sprite amogus;
 	Sprite godot;
+	Sprite saul;
+	Sprite thevoid;
+	Sprite walter;
 	Sprite qwadrat;
 	Sprite cirkle;
 
 	AnimSprite glider;
 
-	PlayerCharacter player1(&qwadrat, Vector2D(250.0, 300.0));
+	PlayerCharacter player1(&qwadrat, Vector2D(128.0, 128.0));
 	PlayerCharacter player2(&cirkle, Vector2D(500.0, 300.0));
+
+	std::vector<Sprite*> spritemap = { &thevoid, &godot, &saul, &walter };
+
+	TileSet tilemap(spritemap, "res/lvl/level0.lvl", TILEMAP_HEIGHT, TILEMAP_WIDTH);
 
 	player1.setMovementSpeed(2.0);
 	player2.setMovementSpeed(2.0);
 
-	if (!amogus.loadFromFile("res/sus.png", defaultRenderer)) {
+	if (!amogus.loadFromFile("res/img/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!godot.loadFromFile("res/icon.png", defaultRenderer)) {
+	if (!godot.loadFromFile("res/img/icon.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!qwadrat.loadFromFile("res/red.png", defaultRenderer)) {
+	if (!qwadrat.loadFromFile("res/img/red.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!cirkle.loadFromFile("res/rednt.png", defaultRenderer)) {
+	if (!cirkle.loadFromFile("res/img/rednt.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!saul.loadFromFile("res/img/saul.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!thevoid.loadFromFile("res/img/void.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!walter.loadFromFile("res/img/walter.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
 	constexpr int GLIDER_FRAME_SIZE = 48;
 	constexpr int GLIDER_FRAME_COUNT = 4;
-	if (!glider.loadFromFile("res/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
+	if (!glider.loadFromFile("res/img/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
 	{
 		printf("Failed to load animated sprite texture!\n");
 		return -3;
@@ -168,7 +191,6 @@ int main(int argc, char* argv[])
 	bool returning = false;
 	//Uint64 gliderFrames = 0;
 
-
 	SDL_Event event;
 	bool run = true;
 
@@ -179,11 +201,10 @@ int main(int argc, char* argv[])
 		Uint64 last = now;
 		now = SDL_GetPerformanceCounter();
 		deltaTime = static_cast<double>((now - last) * 1000) / static_cast<double>(SDL_GetPerformanceFrequency());
-
-
+		
 		//Input processing
 		while (SDL_PollEvent(&event))
-		{
+		{	/*
 			if (event.type == SDL_KEYDOWN)
 			{
 				printf("%s PRESSED\n", SDL_GetScancodeName(event.key.keysym.scancode));
@@ -198,12 +219,13 @@ int main(int argc, char* argv[])
 				SDL_GetMouseState(&x, &y);
 				printf("Mouse position: [x:%d] [y:%d]\n", x, y);
 			}
+			*/
 			// Close game on quit
 			if (event.type == SDL_QUIT) run = false;
 		}
 
-		player1.smoothMove(deltaTime);
-		player2.move(deltaTime);
+		player1.move(deltaTime);
+		//player2.move(deltaTime);
 		
 		//Change sprite offset to simulate movement
 		/*if (offset >= 128)
@@ -222,6 +244,9 @@ int main(int argc, char* argv[])
 		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
 		SDL_RenderClear(defaultRenderer);
 
+		// Render tilemap
+		tilemap.render(defaultRenderer);
+
 		//Render sprites
 		//constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
 		//amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
@@ -238,9 +263,11 @@ int main(int argc, char* argv[])
 	// Clean up before closing
 	player2.free();
 	player1.free();
-	//glider.free();
-	//godot.free();
-	//amogus.free();
+	saul.free();
+	walter.free();
+	glider.free();
+	godot.free();
+	amogus.free();
 	close();
 
 	return 0;
