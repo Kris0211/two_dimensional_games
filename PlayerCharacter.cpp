@@ -17,7 +17,7 @@ PlayerCharacter::PlayerCharacter(Sprite* sprite, Vector2D pos, const float speed
 PlayerCharacter::PlayerCharacter(Sprite* sprite, float x, float y, const float speed)
 {
 	this->playerSprite = sprite;
-	this->position = Vector2D(x, y);
+	this->position = Vector2D(x - sprite->getWidth() * 0.5, y - sprite->getHeight() * 0.5);
 	this->velocity = Vector2D(0, 0);
 	this->speedMultiplier = speed;
 }
@@ -49,9 +49,9 @@ void PlayerCharacter::smoothMove(double delta, float smooth)
 	position += velocity;
 }
 
-void PlayerCharacter::render(SDL_Renderer* renderer, SDL_Rect* clip) const
+void PlayerCharacter::render(SDL_Renderer* renderer, Camera cam) const
 {
-	playerSprite->render(position.x, position.y, renderer, clip);
+	playerSprite->render(position.x - cam.getX(), position.y - cam.getY(), renderer);
 }
 
 Vector2D PlayerCharacter::getPosition() { return position; }
@@ -65,4 +65,3 @@ void PlayerCharacter::setSprite(Sprite* sprite) { playerSprite = sprite; }
 void PlayerCharacter::setMovementSpeed(const float multiplier) { speedMultiplier = multiplier; }
 
 float PlayerCharacter::getMovementSpeed() const { return speedMultiplier; }
-

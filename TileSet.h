@@ -2,13 +2,16 @@
 #include <SDL.h>
 #include <string>
 #include <vector>
+#include "Camera.h"
 #include "Sprite.h"
+
+class Camera;
 
 class TileSet
 {
 public:
 	TileSet(const std::vector<Sprite*> &tileSet, std::string pathTo, int tilemap_width, int tilemap_height);
-	void render(SDL_Renderer* renderer, int tileSize = 64);
+	void render(SDL_Renderer* renderer, Camera cam, int tileSize = 64);
 
 private:
 	std::vector<Sprite*> tileSprites;

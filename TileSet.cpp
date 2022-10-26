@@ -50,13 +50,12 @@ TileSet::TileSet(const std::vector<Sprite*>& tiles, std::string pathTo, int tile
 	else printf("Error loading level!\n");
 }
 
-void TileSet::render(SDL_Renderer* renderer, int tileSize)
+void TileSet::render(SDL_Renderer* renderer, Camera cam, int tileSize)
 {
 	for (int i = 0; i < levelLayout.size(); i++) 
 	{
 		for (int k = 0; k < levelLayout[i].size(); k++) {
-			tileSprites[levelLayout[k][i]]->render(tileSize * i, tileSize * k, renderer);
+			tileSprites[levelLayout[k][i]]->render(tileSize * i - cam.getX(), tileSize * k - cam.getY(), renderer);
 		}
-		printf("\n");
 	}
 }

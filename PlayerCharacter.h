@@ -1,6 +1,9 @@
 #pragma once
+#include "Camera.h"
 #include "Sprite.h"
 #include "Vector2D.h"
+
+class Camera;
 
 class PlayerCharacter
 {
@@ -17,7 +20,7 @@ public:
 
 	void smoothMove(double delta, float smooth = 0.9);
 
-	void render(SDL_Renderer* renderer, SDL_Rect* clip = nullptr) const;
+	void render(SDL_Renderer* renderer, Camera cam) const;
 
 	Vector2D getPosition();
 
@@ -30,7 +33,6 @@ public:
 	void setMovementSpeed(const float multiplier);
 
 	float getMovementSpeed() const;
-
 
 private:
 	Sprite* playerSprite;

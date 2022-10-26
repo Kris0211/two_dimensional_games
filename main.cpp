@@ -7,17 +7,18 @@
 #include <SDL_image.h>
 
 #include "AnimSprite.h"
+#include "Camera.h"
 #include "PlayerCharacter.h"
 #include "Sprite.h"
 #include "TileSet.h"
 #include "Vector2D.h"
 
 constexpr int TILE_SIZE = 64;
-constexpr int TILEMAP_WIDTH = 7;
-constexpr int TILEMAP_HEIGHT = 7;
+constexpr int TILEMAP_WIDTH = 21;
+constexpr int TILEMAP_HEIGHT = 14;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
-constexpr int SCREEN_WIDTH = TILEMAP_WIDTH * TILE_SIZE;
-constexpr int SCREEN_HEIGHT = TILEMAP_HEIGHT * TILE_SIZE;
+constexpr int SCREEN_WIDTH = 600;
+constexpr int SCREEN_HEIGHT = 400;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
@@ -78,7 +79,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 3", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 4", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -126,18 +127,19 @@ int main(int argc, char* argv[])
 	Sprite walter;
 	Sprite qwadrat;
 	Sprite cirkle;
+	Sprite froge;
 
 	AnimSprite glider;
 
-	PlayerCharacter player1(&qwadrat, Vector2D(128.0, 128.0));
-	PlayerCharacter player2(&cirkle, Vector2D(500.0, 300.0));
+	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
+	//PlayerCharacter player2(&saul, Vector2D(500.0, 300.0));
 
-	std::vector<Sprite*> spritemap = { &thevoid, &godot, &saul, &walter };
+	std::vector<Sprite*> spritemap = { &thevoid, &godot, &walter, &walter };
 
 	TileSet tilemap(spritemap, "res/lvl/level0.lvl", TILEMAP_HEIGHT, TILEMAP_WIDTH);
 
 	player1.setMovementSpeed(2.0);
-	player2.setMovementSpeed(2.0);
+	//player2.setMovementSpeed(2.0);
 
 	if (!amogus.loadFromFile("res/img/sus.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
@@ -174,6 +176,11 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
+	if (!froge.loadFromFile("res/img/froggo.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
 	constexpr int GLIDER_FRAME_SIZE = 48;
 	constexpr int GLIDER_FRAME_COUNT = 4;
 	if (!glider.loadFromFile("res/img/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
@@ -193,6 +200,8 @@ int main(int argc, char* argv[])
 
 	SDL_Event event;
 	bool run = true;
+
+	Camera cam(&player1, window);
 
 	// Main game loop
 	while (run)
@@ -225,8 +234,9 @@ int main(int argc, char* argv[])
 		}
 
 		player1.move(deltaTime);
-		//player2.move(deltaTime);
-		
+		cam.run(deltaTime);
+		//player2.smoothMove(deltaTime);
+
 		//Change sprite offset to simulate movement
 		/*if (offset >= 128)
 		{
@@ -245,23 +255,23 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(defaultRenderer);
 
 		// Render tilemap
-		tilemap.render(defaultRenderer);
-
+		tilemap.render(defaultRenderer, cam);
+		 
 		//Render sprites
 		//constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
 		//amogus.render(256, 128 + offset, defaultRenderer); //adding offset simulates movement
 		//godot.render(320, 480, defaultRenderer);
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
-		player1.render(defaultRenderer);
-		player2.render(defaultRenderer);
+		player1.render(defaultRenderer, cam);
+		//player2.render(defaultRenderer);
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
-	player2.free();
+	//player2.free();
 	player1.free();
 	saul.free();
 	walter.free();
