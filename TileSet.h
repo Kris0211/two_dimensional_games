@@ -12,6 +12,7 @@ class TileSet
 public:
 	TileSet(const std::vector<Sprite*> &tileSet, std::string pathTo, int tilemap_width, int tilemap_height);
 	void render(SDL_Renderer* renderer, Camera cam, int tileSize = 64);
+	void free();
 
 private:
 	std::vector<Sprite*> tileSprites;

@@ -49,6 +49,11 @@ void PlayerCharacter::smoothMove(double delta, float smooth)
 	position += velocity;
 }
 
+void PlayerCharacter::render(SDL_Renderer* renderer) const
+{
+	playerSprite->render(position.x - playerSprite->getWidth() * 0.5, position.y - playerSprite->getHeight() * 0.5, renderer);
+}
+
 void PlayerCharacter::render(SDL_Renderer* renderer, Camera cam) const
 {
 	playerSprite->render(position.x - cam.getX(), position.y - cam.getY(), renderer);

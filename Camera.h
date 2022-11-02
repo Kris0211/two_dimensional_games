@@ -19,7 +19,7 @@ public:
 
 	void run(double delta);
 
-private:
+protected:
 	PlayerCharacter* trackedPlayer;
 	SDL_Window* window;
 	Vector2D position;

@@ -8,17 +8,18 @@
 
 #include "AnimSprite.h"
 #include "Camera.h"
+#include "MultiplayerCamera.h"
 #include "PlayerCharacter.h"
 #include "Sprite.h"
 #include "TileSet.h"
 #include "Vector2D.h"
 
 constexpr int TILE_SIZE = 64;
-constexpr int TILEMAP_WIDTH = 21;
-constexpr int TILEMAP_HEIGHT = 14;
+constexpr int TILEMAP_WIDTH = 42;
+constexpr int TILEMAP_HEIGHT = 21;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
-constexpr int SCREEN_WIDTH = 600;
-constexpr int SCREEN_HEIGHT = 400;
+constexpr int SCREEN_WIDTH = 800;
+constexpr int SCREEN_HEIGHT = 600;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
@@ -132,16 +133,16 @@ int main(int argc, char* argv[])
 	AnimSprite glider;
 
 	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
-	//PlayerCharacter player2(&saul, Vector2D(500.0, 300.0));
+	PlayerCharacter player2(&amogus, Vector2D(500.0, 300.0));
 
 	std::vector<Sprite*> spritemap = { &thevoid, &godot, &walter, &walter };
 
-	TileSet tilemap(spritemap, "res/lvl/level0.lvl", TILEMAP_HEIGHT, TILEMAP_WIDTH);
+	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
 
-	player1.setMovementSpeed(2.0);
-	//player2.setMovementSpeed(2.0);
+	player1.setMovementSpeed(4.0);
+	player2.setMovementSpeed(1.5);
 
-	if (!amogus.loadFromFile("res/img/sus.png", defaultRenderer)) {
+	if (!amogus.loadFromFile("res/img/amogi.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -201,7 +202,8 @@ int main(int argc, char* argv[])
 	SDL_Event event;
 	bool run = true;
 
-	Camera cam(&player1, window);
+	//Camera cam(&player1, window);
+	MultiplayerCamera cam(&player1, &player2, window);
 
 	// Main game loop
 	while (run)
@@ -235,7 +237,7 @@ int main(int argc, char* argv[])
 
 		player1.move(deltaTime);
 		cam.run(deltaTime);
-		//player2.smoothMove(deltaTime);
+		player2.smoothMove(deltaTime);
 
 		//Change sprite offset to simulate movement
 		/*if (offset >= 128)
@@ -264,20 +266,21 @@ int main(int argc, char* argv[])
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
 		player1.render(defaultRenderer, cam);
-		//player2.render(defaultRenderer);
+		player2.render(defaultRenderer);
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
-	//player2.free();
+	player2.free();
 	player1.free();
 	saul.free();
 	walter.free();
 	glider.free();
 	godot.free();
 	amogus.free();
+	tilemap.free();
 	close();
 
 	return 0;

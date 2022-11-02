@@ -20,6 +20,8 @@ public:
 
 	void smoothMove(double delta, float smooth = 0.9);
 
+	void render(SDL_Renderer* renderer) const;
+
 	void render(SDL_Renderer* renderer, Camera cam) const;
 
 	Vector2D getPosition();
