@@ -4,7 +4,7 @@
 
 Vector2D::Vector2D() : x(0), y(0){}
 
-Vector2D::Vector2D(float x, float y) : x(x), y(y) {}
+Vector2D::Vector2D(const float x, const float y) : x(x), y(y) {}
 
 Vector2D::Vector2D(const Vector2D& v) : x(v.x), y(v.y) {}
 
@@ -30,7 +30,7 @@ void Vector2D::operator-=(const Vector2D &v)
 	this->y -= v.y;
 }
 
-Vector2D Vector2D::operator*(float f) const
+Vector2D Vector2D::operator*(const float f) const
 {
 	return {x * f, y * f};
 }
@@ -71,8 +71,8 @@ float Vector2D::length() const
 
 void Vector2D::normalize()
 {
-	float n = this->length();
-	if (n != 0.0) {
+	const float n = this->length();
+	if (n != 0.0f) {
 		this->x /= n;
 		this->y /= n;
 	}
@@ -88,5 +88,5 @@ float Vector2D::dotProduct(const Vector2D& v1, const Vector2D& v2)
 
 float Vector2D::angleBetween(const Vector2D& v1, const Vector2D& v2)
 {
-	return acos(Vector2D::dotProduct(v1, v2) / (v1.length() * v2.length()));
+	return acos(dotProduct(v1, v2) / (v1.length() * v2.length()));
 }

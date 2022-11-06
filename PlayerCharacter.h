@@ -10,7 +10,7 @@ class PlayerCharacter
 public:
 	~PlayerCharacter();
 	
-	PlayerCharacter(Sprite* sprite, Vector2D pos, const float speed = 1.0);
+	PlayerCharacter(Sprite* sprite, const Vector2D &pos, const float speed = 1.0);
 	
 	PlayerCharacter(Sprite* sprite, float x, float y, const float speed = 1.0);
 
@@ -22,11 +22,11 @@ public:
 
 	void render(SDL_Renderer* renderer) const;
 
-	void render(SDL_Renderer* renderer, Camera cam) const;
+	void render(SDL_Renderer* renderer, const Camera &cam) const;
 
 	Vector2D getPosition();
 
-	void setPosition(Vector2D &pos);
+	void setPosition(const Vector2D &pos);
 
 	void setPosition(float x, float y);
 

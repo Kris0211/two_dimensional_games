@@ -12,8 +12,12 @@ public:
 	Camera(PlayerCharacter* player, SDL_Window* window);
 	~Camera();
 
-	int getX();
-	int getY();
+	float getX() const;
+	float getY() const;
+	double getScale() const;
+	double getScaleFactor() const;
+
+	void setScaleFactor(double factor);
 
 	void free();
 
@@ -23,4 +27,6 @@ protected:
 	PlayerCharacter* trackedPlayer;
 	SDL_Window* window;
 	Vector2D position;
+	double scale = 1.0;
+	double scaleFactor = 0.0003;
 };

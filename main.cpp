@@ -251,7 +251,6 @@ int main(int argc, char* argv[])
 		offset += returning ? -1 : 1;*/
 
 		//RENDERING
-
 		//Background color
 		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
 		SDL_RenderClear(defaultRenderer);
@@ -266,13 +265,14 @@ int main(int argc, char* argv[])
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
 		player1.render(defaultRenderer, cam);
-		player2.render(defaultRenderer);
+		player2.render(defaultRenderer, cam);
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
+	cam.free();
 	player2.free();
 	player1.free();
 	saul.free();

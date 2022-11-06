@@ -63,7 +63,7 @@ void TileSet::render(SDL_Renderer* renderer, Camera cam, int tileSize)
 	for (int i = 0; i < width; i++)
 	{
 		for (int k = 0; k < height; k++) {
-			tileSprites[levelLayout[k][i]]->render(tileSize * i - cam.getX(), tileSize * k - cam.getY(), renderer);
+			tileSprites[levelLayout[k][i]]->render(tileSize * i - cam.getX(), tileSize * k - cam.getY(), cam.getScale(), renderer);
 		}
 	}
 }

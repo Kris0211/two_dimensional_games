@@ -8,7 +8,7 @@ AnimSprite::AnimSprite()
 	frameCount = 1;
 }
 
-bool AnimSprite::loadFromFile(std::string pathTo, SDL_Renderer* renderer, const int fSize, const int fCount)
+bool AnimSprite::loadFromFile(const std::string pathTo, SDL_Renderer* renderer, const int fSize, const int fCount)
 {
 	frameCount = fCount;
 	Sprite::loadFromFile(pathTo, renderer);
@@ -26,15 +26,15 @@ bool AnimSprite::loadFromFile(std::string pathTo, SDL_Renderer* renderer, const 
 	return sprTexture != nullptr;
 }
 
-void AnimSprite::render(int x, int y, const int frame, SDL_Renderer* renderer) const
+void AnimSprite::render(const int x, const int y, const int frame, SDL_Renderer* renderer) const
 {
-	SDL_Rect rect = {
+	const SDL_Rect rect = {
 		x,
 		y,
 		frames[frame].w,
 		frames[frame].h
 	};
-	SDL_Rect clip = frames[frame];
+	const SDL_Rect clip = frames[frame];
 	SDL_RenderCopy(renderer, sprTexture, &clip, &rect);
 }
 

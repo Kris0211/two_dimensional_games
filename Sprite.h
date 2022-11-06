@@ -9,9 +9,9 @@ public:
 
 	~Sprite();
 
-	bool loadFromFile(std::string pathTo, SDL_Renderer* rederer);
+	bool loadFromFile(std::string pathTo, SDL_Renderer* renderer);
 
-	void render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip = nullptr) const;
+	void render(int x, int y, double scale, SDL_Renderer* renderer) const;
 
 	void free();
 

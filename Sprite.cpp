@@ -14,7 +14,7 @@ Sprite::~Sprite()
 	free();
 }
 
-bool Sprite::loadFromFile(std::string pathTo, SDL_Renderer* renderer)
+bool Sprite::loadFromFile(const std::string pathTo, SDL_Renderer* renderer)
 {
 	free();
 
@@ -44,15 +44,15 @@ void Sprite::free()
 	}
 }
 
-void Sprite::render(const int x, const int y, SDL_Renderer* renderer, SDL_Rect* clip) const
+void Sprite::render(const int x, const int y, double scale, SDL_Renderer* renderer) const
 {
-	SDL_Rect rect = { x, y, width, height };
-	if (clip != nullptr)
-	{
-		rect.w = clip->w;
-		rect.h = clip->h;
-	}
-	SDL_RenderCopy(renderer, sprTexture, clip, &rect);
+	SDL_Rect rect;
+	rect.x = static_cast<int>((x - width * 0.5) * scale);
+	rect.y = static_cast<int>((y - height * 0.5) * scale);
+	rect.w = static_cast<int>(width * scale);
+	rect.h = static_cast<int>(height * scale);
+
+	SDL_RenderCopy(renderer, sprTexture, nullptr, &rect);
 }
 
 int Sprite::getWidth() const { return width; }
