@@ -11,7 +11,10 @@ public:
 
 	void run(double delta);
 
+	void setDistanceTreshold(int treshold);
+
 protected:
 	PlayerCharacter* secondPlayer;
+	int distanceTreshold = 100000;
 };
 

@@ -80,7 +80,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 4", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 5", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -252,7 +252,7 @@ int main(int argc, char* argv[])
 
 		//RENDERING
 		//Background color
-		SDL_SetRenderDrawColor(defaultRenderer, 0x48, 0x72, 0x8C, 0xFF);
+		SDL_SetRenderDrawColor(defaultRenderer, 0x00, 0x00, 0x00, 0xFF);
 		SDL_RenderClear(defaultRenderer);
 
 		// Render tilemap
