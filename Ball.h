@@ -11,7 +11,7 @@ public:
 
 	void move();
 
-	void touch();
+	void touch(Ball* balls[]);
 
 	Vector2D getPosition() const;
 	Vector2D getVelocity() const;

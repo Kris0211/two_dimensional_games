@@ -19,24 +19,24 @@ Ball::~Ball()
 void Ball::move()
 {
 	position += velocity;
-	touch();
 	ballSprite->render(position.x, position.y, scale, renderer);
 }
 
-void Ball::touch()
+void Ball::touch(Ball* balls[])
 {
+	// touch grass err I mean walls
 	if ((position.x + radius) >= SCREEN_WIDTH || (position.x - radius) < 0.0)
 	{
-		printf("cholibka.x\n");
 		velocity.x *= -1;
 	}
 	if ((position.y + radius) >= SCREEN_HEIGHT || (position.y - radius) < 0.0)
 	{
-		printf("cholibka.y\n");
 		velocity.y *= -1;
 	}
-}
 
+	// touch balls ._.
+
+}
 
 Vector2D Ball::getPosition() const { return position; }
 

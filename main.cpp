@@ -150,9 +150,18 @@ int main(int argc, char* argv[])
 		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
 	};
 
-	for (int i = 0; i < 8; i++) 
+	srand(time(nullptr));
+	
+
+	for (int i = 0; i < 10; i++) 
 	{
-		balls.push_back(new Ball(defaultRenderer, &mpostol, Vector2D(400, 300), why[i]));
+		int vecx, vecy;
+		do {
+			 vecx = (rand() % 10) - 5;
+			 vecy = (rand() % 10) - 5;
+		} while (vecx == 0 || vecy == 0);
+		Vector2D velctor(vecx, vecy);
+		balls.push_back(new Ball(defaultRenderer, &mpostol, Vector2D(400, 300), velctor));
 	}
 
 	/*
@@ -302,8 +311,11 @@ int main(int argc, char* argv[])
 		//player1.render(defaultRenderer, cam);
 		//player2.render(defaultRenderer, cam);
 
-		for (Ball* ball : balls)
+		for (Ball* ball : balls) 
+		{
+			//ball->touch(balls);
 			ball->move();
+		}
 
 		//stonogaball.move();
 		//goodmanball.move();
