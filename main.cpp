@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 
 #include "AnimSprite.h"
+#include "Ball.h"
 #include "Camera.h"
 #include "MultiplayerCamera.h"
 #include "PlayerCharacter.h"
@@ -80,7 +81,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 5", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 6", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -121,6 +122,36 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
+	Sprite zbysiu;
+	if (!zbysiu.loadFromFile("res/img/dramat.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	Sprite saul;
+	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	Sprite mpostol;
+	if (!mpostol.loadFromFile("res/img/postolball.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+
+	//Ball stonogaball(defaultRenderer, &zbysiu, Vector2D(0, 0));
+	//Ball goodmanball(defaultRenderer, &saul, Vector2D(0, 0));
+
+	Ball* balls[8];
+
+	for (int i = 0; i < 8; i++) 
+	{
+		balls[i] = new Ball(defaultRenderer, &mpostol, Vector2D(32, 32), Vector2D(i, i));;
+	}
+
+	/*
 	Sprite amogus;
 	Sprite godot;
 	Sprite saul;
@@ -189,21 +220,21 @@ int main(int argc, char* argv[])
 		printf("Failed to load animated sprite texture!\n");
 		return -3;
 	}
-
+	*/
 	// Delta time
 	Uint64 now = SDL_GetPerformanceCounter();
 	double deltaTime;
 
 	// Animation variables
-	int offset = 128;
-	bool returning = false;
+	//int offset = 128;
+	//bool returning = false;
 	//Uint64 gliderFrames = 0;
+
+	//Camera cam(&player1, window);
+	//MultiplayerCamera cam(&player1, &player2, window);
 
 	SDL_Event event;
 	bool run = true;
-
-	//Camera cam(&player1, window);
-	MultiplayerCamera cam(&player1, &player2, window);
 
 	// Main game loop
 	while (run)
@@ -235,9 +266,9 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT) run = false;
 		}
 
-		player1.move(deltaTime);
-		cam.run(deltaTime);
-		player2.smoothMove(deltaTime);
+		//player1.move(deltaTime);
+		//cam.run(deltaTime);
+		//player2.smoothMove(deltaTime);
 
 		//Change sprite offset to simulate movement
 		/*if (offset >= 128)
@@ -256,7 +287,7 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(defaultRenderer);
 
 		// Render tilemap
-		tilemap.render(defaultRenderer, cam);
+		//tilemap.render(defaultRenderer, cam);
 		 
 		//Render sprites
 		//constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
@@ -264,14 +295,21 @@ int main(int argc, char* argv[])
 		//godot.render(320, 480, defaultRenderer);
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
-		player1.render(defaultRenderer, cam);
-		player2.render(defaultRenderer, cam);
+		//player1.render(defaultRenderer, cam);
+		//player2.render(defaultRenderer, cam);
+
+		for (Ball* ball : balls)
+			ball->move();
+
+		//stonogaball.move();
+		//goodmanball.move();
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
+	/*
 	cam.free();
 	player2.free();
 	player1.free();
@@ -281,6 +319,7 @@ int main(int argc, char* argv[])
 	godot.free();
 	amogus.free();
 	tilemap.free();
+	*/
 	close();
 
 	return 0;
