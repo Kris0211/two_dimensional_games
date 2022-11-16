@@ -143,16 +143,16 @@ int main(int argc, char* argv[])
 	//Ball stonogaball(defaultRenderer, &zbysiu, Vector2D(0, 0));
 	//Ball goodmanball(defaultRenderer, &saul, Vector2D(0, 0));
 
-	Ball* balls[8];
+	std::vector<Ball*> balls;
 
-	Vector2D why[8] { Vector2D(-2, -1.5), Vector2D(-2, 0), Vector2D(-2, 1.5),
-		Vector2D(0, -1.5), Vector2D(0, 1.5),
-		Vector2D(2, -1.5), Vector2D(2, 0), Vector2D(2, 1.5) 
+	Vector2D why[8] { Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
+		Vector2D(0, -3), Vector2D(0, 3),
+		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
 	};
 
 	for (int i = 0; i < 8; i++) 
 	{
-		balls[i] = new Ball(defaultRenderer, &mpostol, Vector2D(400, 300), why[i]);
+		balls.push_back(new Ball(defaultRenderer, &mpostol, Vector2D(400, 300), why[i]));
 	}
 
 	/*

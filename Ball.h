@@ -27,4 +27,7 @@ private:
 	float scale = 1.0f;
 	Vector2D position;
 	Vector2D velocity;
+
+	const int SCREEN_WIDTH = 800;
+	const int SCREEN_HEIGHT = 600;
 };
