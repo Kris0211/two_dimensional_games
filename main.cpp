@@ -114,57 +114,12 @@ void close()
 
 int main(int argc, char* argv[])
 {
-	srand(time(NULL));
-
 	if (!init())
 	{
 		printf("Initialization failed: %s\n", SDL_GetError());
 		return -1;
 	}
-
-	Sprite zbysiu;
-	if (!zbysiu.loadFromFile("res/img/dramat.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	Sprite saul;
-	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	Sprite mpostol;
-	if (!mpostol.loadFromFile("res/img/postolball.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	//Ball stonogaball(defaultRenderer, &zbysiu, Vector2D(0, 0));
-	//Ball goodmanball(defaultRenderer, &saul, Vector2D(0, 0));
-
-	std::vector<Ball*> balls;
-
-	Vector2D why[8] { Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
-		Vector2D(0, -3), Vector2D(0, 3),
-		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
-	};
-
-	srand(time(nullptr));
 	
-
-	for (int i = 0; i < 10; i++) 
-	{
-		int vecx, vecy;
-		do {
-			 vecx = (rand() % 10) - 5;
-			 vecy = (rand() % 10) - 5;
-		} while (vecx == 0 || vecy == 0);
-		Vector2D velctor(vecx, vecy);
-		balls.push_back(new Ball(defaultRenderer, &mpostol, Vector2D(400, 300), velctor));
-	}
-
-	/*
 	Sprite amogus;
 	Sprite godot;
 	Sprite saul;
@@ -174,7 +129,7 @@ int main(int argc, char* argv[])
 	Sprite cirkle;
 	Sprite froge;
 
-	AnimSprite glider;
+	/*AnimSprite glider;
 
 	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
 	PlayerCharacter player2(&amogus, Vector2D(500.0, 300.0));
@@ -184,7 +139,7 @@ int main(int argc, char* argv[])
 	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
 
 	player1.setMovementSpeed(4.0);
-	player2.setMovementSpeed(1.5);
+	player2.setMovementSpeed(1.5);*/
 
 	if (!amogus.loadFromFile("res/img/amogi.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
@@ -206,7 +161,7 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	if (!saul.loadFromFile("res/img/saul.png", defaultRenderer)) {
+	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -226,7 +181,29 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	constexpr int GLIDER_FRAME_SIZE = 48;
+	const std::vector<Sprite*> sprites = { &saul, &cirkle };
+
+	std::vector<Ball*> balls;
+
+	/*Vector2D why[8]{Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
+		Vector2D(0, -3), Vector2D(0, 3),
+		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
+	};*/
+
+	srand(time(nullptr));
+
+	for (int i = 0; i < 16; i++) 
+	{
+		int vecx, vecy;
+		do {
+			 vecx = (rand() % 2) - 2;
+			 vecy = (rand() % 2) - 2;
+		} while (vecx == 0 || vecy == 0);
+		Vector2D velctor(vecx, vecy);
+		balls.push_back(new Ball(defaultRenderer, sprites[i % sprites.size()], Vector2D(400, 300), velctor));
+	}
+	
+	/*constexpr int GLIDER_FRAME_SIZE = 48;
 	constexpr int GLIDER_FRAME_COUNT = 4;
 	if (!glider.loadFromFile("res/img/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
 	{
@@ -313,12 +290,18 @@ int main(int argc, char* argv[])
 
 		for (Ball* ball : balls) 
 		{
-			//ball->touch(balls);
-			ball->move();
+			ball->move(deltaTime);
 		}
 
-		//stonogaball.move();
-		//goodmanball.move();
+		for (Ball* ball : balls)
+		{
+			ball->touch(balls);
+		}
+
+		for (Ball* ball : balls)
+		{
+			ball->render();
+		}
 
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);

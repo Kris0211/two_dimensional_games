@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL.h>
+#include <vector>
+
 #include "Sprite.h"
 #include "Vector2D.h"
 
@@ -9,9 +11,11 @@ public:
 	Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D position = Vector2D(0, 0), const Vector2D velocity = Vector2D(1, 1));
 	~Ball();
 
-	void move();
+	void move(double deltaTime);
 
-	void touch(Ball* balls[]);
+	void touch(const std::vector<Ball*> &balls, bool separation = true, bool reflection = true);
+
+	void render();
 
 	Vector2D getPosition() const;
 	Vector2D getVelocity() const;
