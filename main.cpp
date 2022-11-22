@@ -119,16 +119,38 @@ int main(int argc, char* argv[])
 		printf("Initialization failed: %s\n", SDL_GetError());
 		return -1;
 	}
+<<<<<<< Updated upstream
 	
+=======
+
+	Sprite zbysiu;
+	if (!zbysiu.loadFromFile("res/img/dramat.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	Sprite saul;
+	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	Sprite mpostol;
+	if (!mpostol.loadFromFile("res/img/postolball.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+>>>>>>> Stashed changes
 	Sprite amogus;
 	Sprite godot;
-	Sprite saul;
 	Sprite thevoid;
 	Sprite walter;
 	Sprite qwadrat;
 	Sprite cirkle;
 	Sprite froge;
 
+<<<<<<< Updated upstream
 	/*AnimSprite glider;
 
 	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
@@ -141,6 +163,8 @@ int main(int argc, char* argv[])
 	player1.setMovementSpeed(4.0);
 	player2.setMovementSpeed(1.5);*/
 
+=======
+>>>>>>> Stashed changes
 	if (!amogus.loadFromFile("res/img/amogi.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
@@ -161,22 +185,8 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
+<<<<<<< Updated upstream
 	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!thevoid.loadFromFile("res/img/void.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!walter.loadFromFile("res/img/walter.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!froge.loadFromFile("res/img/froggo.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -204,6 +214,46 @@ int main(int argc, char* argv[])
 	}
 	
 	/*constexpr int GLIDER_FRAME_SIZE = 48;
+=======
+	//Ball stonogaball(defaultRenderer, &zbysiu, Vector2D(0, 0));
+	//Ball goodmanball(defaultRenderer, &saul, Vector2D(0, 0));
+
+	std::vector<Ball*> balls;
+
+	Vector2D why[8] { Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
+		Vector2D(0, -3), Vector2D(0, 3),
+		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
+	};
+
+	srand(time(nullptr));
+	
+	Sprite* sprites[2] = { &zbysiu, &saul };
+
+	for (int i = 0; i < 34; i++) 
+	{
+		int vecx, vecy;
+		do {
+			 vecx = (rand() % 20) - 10;
+			 vecy = (rand() % 20) - 10;
+		} while (vecx == 0 || vecy == 0);
+		Vector2D velctor(vecx, vecy);
+		balls.push_back(new Ball(defaultRenderer, sprites[i % 2], Vector2D(400, 300), velctor));
+	}
+
+	/*AnimSprite glider;
+
+	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
+	PlayerCharacter player2(&amogus, Vector2D(500.0, 300.0));
+
+	std::vector<Sprite*> spritemap = { &thevoid, &godot, &walter, &walter };
+
+	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
+
+	player1.setMovementSpeed(4.0);
+	player2.setMovementSpeed(1.5);
+
+	constexpr int GLIDER_FRAME_SIZE = 48;
+>>>>>>> Stashed changes
 	constexpr int GLIDER_FRAME_COUNT = 4;
 	if (!glider.loadFromFile("res/img/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
 	{

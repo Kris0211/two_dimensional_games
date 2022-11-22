@@ -15,7 +15,11 @@ public:
 
 	void touch(const std::vector<Ball*> &balls, bool separation = true, bool reflection = true);
 
+<<<<<<< Updated upstream
 	void render();
+=======
+	void touch(); //Ball* balls[]
+>>>>>>> Stashed changes
 
 	Vector2D getPosition() const;
 	Vector2D getVelocity() const;

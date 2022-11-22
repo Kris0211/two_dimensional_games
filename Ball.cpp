@@ -16,9 +16,20 @@ Ball::~Ball()
 	renderer = nullptr;
 }
 
+<<<<<<< Updated upstream
 void Ball::move(double deltaTime) {	position += velocity * static_cast<float>(deltaTime); }
 
 void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflection)
+=======
+void Ball::move()
+{
+	position += velocity;
+	touch();
+	ballSprite->render(position.x, position.y, scale, renderer);
+}
+
+void Ball::touch()//Ball* balls[]
+>>>>>>> Stashed changes
 {
 	// touch grass err I mean walls
 	if (position.x + radius >= SCREEN_WIDTH || position.x - radius < 0.0)
