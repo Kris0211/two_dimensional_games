@@ -16,29 +16,36 @@ Ball::~Ball()
 	renderer = nullptr;
 }
 
-<<<<<<< Updated upstream
-void Ball::move(double deltaTime) {	position += velocity * static_cast<float>(deltaTime); }
-
-void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflection)
-=======
-void Ball::move()
+void Ball::move(double deltaTime)
 {
-	position += velocity;
-	touch();
-	ballSprite->render(position.x, position.y, scale, renderer);
+	position += velocity * static_cast<float>(deltaTime);
 }
 
-void Ball::touch()//Ball* balls[]
->>>>>>> Stashed changes
+void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflection)
 {
 	// touch grass err I mean walls
-	if (position.x + radius >= SCREEN_WIDTH || position.x - radius < 0.0)
+	if (position.x + radius >= SCREEN_WIDTH)
 	{
 		velocity.x *= -1;
+		position.x = static_cast<float>(SCREEN_WIDTH) - radius;
 	}
-	if (position.y + radius >= SCREEN_HEIGHT || position.y - radius < 0.0)
+
+	if (position.x - radius < 0.0)
+	{
+			velocity.x *= -1;
+			position.x = radius;
+	}
+
+	if (position.y + radius >= SCREEN_HEIGHT)
 	{
 		velocity.y *= -1;
+		position.y = static_cast<float>(SCREEN_HEIGHT) - radius;
+	}
+
+	if (position.y - radius < 0.0)
+	{
+		velocity.y *= -1;
+		position.y = radius;
 	}
 
 	// touch balls ._.
@@ -47,7 +54,7 @@ void Ball::touch()//Ball* balls[]
 		if (ball == this) continue;  // Don't collide with yourself
 
 		Vector2D vec = (position - ball->position);
-		float dist = vec.length();
+		const float dist = vec.length();
 		if (dist < this->radius + ball->radius)
 		{
 			vec.normalize();
@@ -69,7 +76,7 @@ void Ball::touch()//Ball* balls[]
 
 }
 
-void Ball::render()
+void Ball::render() const
 {
 	ballSprite->render(static_cast<int>(position.x), static_cast<int>(position.y), scale, renderer);
 }
