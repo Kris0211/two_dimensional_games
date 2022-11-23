@@ -134,12 +134,7 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	if (!godot.loadFromFile("res/img/icon.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!qwadrat.loadFromFile("res/img/red.png", defaultRenderer)) {
+	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -154,7 +149,7 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	const std::vector<Sprite*> sprites = { &saul, &cirkle };
+	const std::vector<Sprite*> sprites = { &saul };
 
 	std::vector<Ball*> balls;
 

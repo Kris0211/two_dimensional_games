@@ -18,7 +18,7 @@ Ball::~Ball()
 
 void Ball::move(double deltaTime)
 {
-	position += velocity * static_cast<float>(deltaTime);
+	position += velocity * 2;// *deltaTime;
 }
 
 void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflection)
