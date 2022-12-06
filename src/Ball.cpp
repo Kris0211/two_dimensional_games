@@ -1,6 +1,6 @@
 #include "Ball.h"
 
-Ball::Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D position, const Vector2D velocity)
+Ball::Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D &position, const Vector2D &velocity)
 {
 	this->renderer = renderer;
 	this->ballSprite = sprite;
@@ -21,7 +21,7 @@ void Ball::move(double deltaTime)
 	position += velocity * 2;// *deltaTime;
 }
 
-void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflection)
+void Ball::collide(const bool separation, const bool reflection)
 {
 	// touch grass err I mean walls
 	if (position.x + radius >= SCREEN_WIDTH)
@@ -49,7 +49,7 @@ void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflecti
 	}
 
 	// touch balls ._.
-	for (Ball* ball : balls)
+	/*for (Ball* ball : balls)
 	{
 		if (ball == this) continue;  // Don't collide with yourself
 
@@ -72,7 +72,7 @@ void Ball::touch(const std::vector<Ball*>& balls, bool separation, bool reflecti
 			}
 		}
 
-	}
+	}*/
 
 }
 

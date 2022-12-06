@@ -29,8 +29,7 @@ bool AnimSprite::loadFromFile(const std::string pathTo, SDL_Renderer* renderer, 
 void AnimSprite::render(const int x, const int y, const int frame, SDL_Renderer* renderer) const
 {
 	const SDL_Rect rect = {
-		x,
-		y,
+		x, y,
 		frames[frame].w,
 		frames[frame].h
 	};

@@ -35,19 +35,21 @@ void MultiplayerCamera::run(double delta)
 	int distSquared = (secondPlayer->getPosition().x - trackedPlayer->getPosition().x) * (secondPlayer->getPosition().x - trackedPlayer->getPosition().x) +
 		(secondPlayer->getPosition().y - trackedPlayer->getPosition().y) * (secondPlayer->getPosition().y - trackedPlayer->getPosition().y);
 
-	Vector2D trackedPosition = distSquared > distanceTreshold ? (trackedPlayer->getPosition() * 3 + secondPlayer->getPosition()) / 4
-		: (trackedPlayer->getPosition() + secondPlayer->getPosition()) / 2;
+	//Vector2D trackedPosition = distSquared > distanceTreshold ? (trackedPlayer->getPosition() * 3  + secondPlayer->getPosition()) / 4
+	//	: (trackedPlayer->getPosition() + secondPlayer->getPosition()) / 2;
+
+	Vector2D trackedPosition = (trackedPlayer->getPosition() + secondPlayer->getPosition()) / 2;
 
 	//trackedPosition = (trackedPlayer->getPosition() * 2 + secondPlayer->getPosition()) / 3;
 
-	if (trackedPosition.y < position.y + static_cast<float>(windowSizeY) * 0.4f)
+	if (trackedPosition.y < position.y + static_cast<float>(windowSizeY) * 0.3f)
 	{
-		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.4f;
+		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.3f;
 	}
 
-	if (trackedPosition.y > position.y + static_cast<float>(windowSizeY) * 0.6f)
+	if (trackedPosition.y > position.y + static_cast<float>(windowSizeY) * 0.7f)
 	{
-		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.6f;
+		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.7f;
 	}
 
 	position.x = position.x + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.x);

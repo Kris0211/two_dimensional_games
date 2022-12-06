@@ -28,5 +28,5 @@ protected:
 	SDL_Window* window;
 	Vector2D position;
 	double scale = 1.0;
-	double scaleFactor = 0.0003;
+	double scaleFactor = 0.00035;
 };

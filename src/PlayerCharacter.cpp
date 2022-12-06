@@ -27,11 +27,20 @@ void PlayerCharacter::free()
 	playerSprite = nullptr;
 }
 
-void PlayerCharacter::move(double delta)
+void PlayerCharacter::move(double delta, bool use_arrows)
 {
 	const Uint8* keyPress = SDL_GetKeyboardState(nullptr);
-	velocity = Vector2D(keyPress[SDL_SCANCODE_RIGHT] - keyPress[SDL_SCANCODE_LEFT],
-						keyPress[SDL_SCANCODE_DOWN] - keyPress[SDL_SCANCODE_UP]);
+	if (use_arrows)
+	{
+		velocity = Vector2D(keyPress[SDL_SCANCODE_RIGHT] - keyPress[SDL_SCANCODE_LEFT],
+			keyPress[SDL_SCANCODE_DOWN] - keyPress[SDL_SCANCODE_UP]);
+	}
+	else
+	{
+		velocity = Vector2D(keyPress[SDL_SCANCODE_D] - keyPress[SDL_SCANCODE_A],
+			keyPress[SDL_SCANCODE_S] - keyPress[SDL_SCANCODE_W]);
+	}
+
 	if (velocity.length() != 0.0f)
 	{
 		velocity.normalize();

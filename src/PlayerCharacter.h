@@ -16,7 +16,8 @@ public:
 
 	void free();
 
-	void move(double delta);
+	void move(double delta, bool use_arrows = true);
+	
 
 	void smoothMove(double delta, float smooth = 0.9);
 

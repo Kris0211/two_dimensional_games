@@ -6,21 +6,20 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "AnimSprite.h"
-#include "Ball.h"
-#include "Camera.h"
-#include "MultiplayerCamera.h"
-#include "PlayerCharacter.h"
-#include "Sprite.h"
-#include "TileSet.h"
-#include "Vector2D.h"
+#include "src/AnimSprite.h"
+#include "src/Ball.h"
+#include "src/MultiplayerCamera.h"
+#include "src/PlayerCharacter.h"
+#include "src/Sprite.h"
+#include "src/TileSet.h"
+#include "src/Vector2D.h"
 
 constexpr int TILE_SIZE = 64;
 constexpr int TILEMAP_WIDTH = 42;
 constexpr int TILEMAP_HEIGHT = 21;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
-constexpr int SCREEN_WIDTH = 800;
-constexpr int SCREEN_HEIGHT = 600;
+constexpr int SCREEN_WIDTH = 1200;
+constexpr int SCREEN_HEIGHT = 900;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
@@ -122,6 +121,7 @@ int main(int argc, char* argv[])
 
 	Sprite amogus;
 	Sprite saul;
+	Sprite saulball;
 	Sprite godot;
 	Sprite thevoid;
 	Sprite walter;
@@ -134,7 +134,12 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
+	if (!saul.loadFromFile("res/img/saul.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!saulball.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -144,19 +149,34 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	if (!saul.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
+	if (!thevoid.loadFromFile("res/img/void.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
+	if (!walter.loadFromFile("res/img/walter.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!froge.loadFromFile("res/img/froggo.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!godot.loadFromFile("res/img/icon.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+	/*
 	const std::vector<Sprite*> sprites = { &saul };
 
 	std::vector<Ball*> balls;
 
-	/*Vector2D why[8]{Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
+	Vector2D why[8]{Vector2D(-4, -3), Vector2D(-4, 0), Vector2D(-4, 3),
 		Vector2D(0, -3), Vector2D(0, 3),
 		Vector2D(4, -3), Vector2D(4, 0), Vector2D(4, 3) 
-	};*/
+	};
 
 	srand(time(nullptr));
 
@@ -170,21 +190,22 @@ int main(int argc, char* argv[])
 		Vector2D velctor(vecx, vecy);
 		balls.push_back(new Ball(defaultRenderer, sprites[i % sprites.size()], Vector2D(400, 300), velctor));
 	}
+	*/
 	
-	/*AnimSprite glider;
-
-	PlayerCharacter player1(&froge, Vector2D(400.0, 300.0));
-	PlayerCharacter player2(&amogus, Vector2D(500.0, 300.0));
+	PlayerCharacter player1(&saul, Vector2D(400.0, 300.0));
+	PlayerCharacter player2(&saulball, Vector2D(500.0, 300.0));
 
 	std::vector<Sprite*> spritemap = { &thevoid, &godot, &walter, &walter };
 
 	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
 
-	player1.setMovementSpeed(4.0);
-	player2.setMovementSpeed(1.5);
+	player1.setMovementSpeed(2.0f);
+	player2.setMovementSpeed(2.0f);
 
+	/*
+	AnimSprite glider;
+	
 	constexpr int GLIDER_FRAME_SIZE = 48;
-
 	constexpr int GLIDER_FRAME_COUNT = 4;
 	if (!glider.loadFromFile("res/img/glider.png", defaultRenderer, GLIDER_FRAME_SIZE, GLIDER_FRAME_COUNT))
 	{
@@ -192,24 +213,24 @@ int main(int argc, char* argv[])
 		return -3;
 	}
 	*/
-	// Delta time
-	Uint64 now = SDL_GetPerformanceCounter();
-	double deltaTime;
 
 	// Animation variables
 	//int offset = 128;
 	//bool returning = false;
 	//Uint64 gliderFrames = 0;
 
-	//Camera cam(&player1, window);
-	//MultiplayerCamera cam(&player1, &player2, window);
-
-	SDL_Event event;
-	bool run = true;
+	// Delta time
+	Uint64 now = SDL_GetPerformanceCounter();
+	double deltaTime;
+	
+	MultiplayerCamera cam(&player1, &player2, window);
 
 	// Collision variables
 	bool separation = true;
 	bool reflection = true;
+
+	SDL_Event event;
+	bool run = true;
 
 	// Main game loop
 	while (run)
@@ -241,28 +262,26 @@ int main(int argc, char* argv[])
 			{
 				if (event.key.keysym.sym == SDLK_1)
 				{
+					separation = !separation;
 					if (separation)
 					{
-						printf("Separation disabled\n");
-						separation = false;
+						printf("Separation enabled\n");
 					}
 					else
 					{
-						printf("Separation enabled\n");
-						separation = true;
+						printf("Separation disabled\n");
 					}
 				}
 				if (event.key.keysym.sym == SDLK_2)
 				{
+					reflection = !reflection;
 					if (reflection)
 					{
-						printf("Reflection disabled\n");
-						reflection = false;
+						printf("Reflection enabled\n");
 					}
 					else
 					{
-						printf("Reflection enabled\n");
-						reflection = true;
+						printf("Reflection disabled\n");
 					}
 				}
 
@@ -271,9 +290,9 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT) run = false;
 		}
 
-		//player1.move(deltaTime);
-		//cam.run(deltaTime);
-		//player2.smoothMove(deltaTime);
+		player1.move(deltaTime, false);
+		player2.move(deltaTime, true);
+		cam.run(deltaTime);
 
 		//Change sprite offset to simulate movement
 		/*if (offset >= 128)
@@ -292,7 +311,7 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(defaultRenderer);
 
 		// Render tilemap
-		//tilemap.render(defaultRenderer, cam);
+		tilemap.render(defaultRenderer, cam);
 		 
 		//Render sprites
 		//constexpr int GLIDER_ANIM_SPEED_DELAY = 30;
@@ -300,40 +319,40 @@ int main(int argc, char* argv[])
 		//godot.render(320, 480, defaultRenderer);
 		//glider.render(256 - offset * 2, 256 - offset * 2, static_cast<int>((++gliderFrames / GLIDER_ANIM_SPEED_DELAY) % GLIDER_FRAME_COUNT), defaultRenderer);
 
-		//player1.render(defaultRenderer, cam);
-		//player2.render(defaultRenderer, cam);
+		player1.render(defaultRenderer, cam);
+		player2.render(defaultRenderer, cam);
 
-		for (Ball* ball : balls) 
-		{
-			ball->move(deltaTime);
-		}
+		// Render balls
+		/*{
+			for (Ball* ball : balls)
+			{
+				ball->move(deltaTime);
+			}
 
-		for (Ball* ball : balls)
-		{
-			ball->touch(balls, separation, reflection);
-		}
+			for (Ball* ball : balls)
+			{
+				ball->touch(balls, separation, reflection);
+			}
 
-		for (Ball* ball : balls)
-		{
-			ball->render();
-		}
-
+			for (Ball* ball : balls)
+			{
+				ball->render();
+			}
+		}*/
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
-	/*
 	cam.free();
 	player2.free();
 	player1.free();
 	saul.free();
 	walter.free();
-	glider.free();
+	//glider.free();
 	godot.free();
 	amogus.free();
-	tilemap.free();
-	*/
+	tilemap.free(); 
 	close();
 
 	return 0;

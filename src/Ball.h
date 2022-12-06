@@ -2,18 +2,19 @@
 #include <SDL.h>
 #include <vector>
 
+#include "CollisionBody.h"
 #include "Sprite.h"
 #include "Vector2D.h"
 
-class Ball
+class Ball : public CollisionBody
 {
 public:
-	Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D position = Vector2D(0, 0), const Vector2D velocity = Vector2D(1, 1));
+	Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D& position = Vector2D(0, 0), const Vector2D& velocity = Vector2D(1, 1));
 	~Ball();
 
 	void move(double deltaTime);
 
-	void touch(const std::vector<Ball*> &balls, bool separation = true, bool reflection = true);
+	void collide(const std::vector<Ball*> &balls, bool separation = true, bool reflection = true);
 
 	void render() const;
 
