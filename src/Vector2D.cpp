@@ -78,15 +78,27 @@ void Vector2D::normalize()
 	}
 }
 
-float Vector2D::dotProduct(const Vector2D& v1, const Vector2D& v2)
+Vector2D Vector2D::clamp(const Vector2D &v, const Vector2D &min, const Vector2D &max)
 {
-	Vector2D vect;
-	vect.x = v1.x * v2.x;
-	vect.y = v1.y * v2.y;
-	return vect.x + vect.y;
+	Vector2D vec = v;
+	if (v.x < min.x) vec.x = min.x;
+	else if (v.x > max.x) vec.x = max.x;
+
+	if (v.y < min.y) vec.y = min.y;
+	else if (v.y > max.y) vec.y = max.y;
+
+	return vec;
 }
 
-float Vector2D::angleBetween(const Vector2D& v1, const Vector2D& v2)
+float Vector2D::dotProduct(const Vector2D &v1, const Vector2D &v2)
+{
+	Vector2D vec;
+	vec.x = v1.x * v2.x;
+	vec.y = v1.y * v2.y;
+	return vec.x + vec.y;
+}
+
+float Vector2D::angleBetween(const Vector2D &v1, const Vector2D &v2)
 {
 	return acos(dotProduct(v1, v2) / (v1.length() * v2.length()));
 }

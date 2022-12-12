@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CollisionBody.cpp" />
+    <ClCompile Include="src\Box.cpp" />
+    <ClCompile Include="src\CollisionManager.cpp" />
     <ClCompile Include="src\AnimSprite.cpp" />
     <ClCompile Include="src\Ball.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -31,6 +32,8 @@
     <ClCompile Include="src\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Box.h" />
+    <ClInclude Include="src\CollisionManager.h" />
     <ClInclude Include="src\CollisionBody.h" />
     <ClInclude Include="src\AnimSprite.h" />
     <ClInclude Include="src\Ball.h" />

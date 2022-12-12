@@ -1,4 +1,3 @@
-#pragma once
 #include "Sprite.h"
 #include <SDL_image.h>
 
@@ -16,6 +15,7 @@ Sprite::~Sprite()
 
 bool Sprite::loadFromFile(const std::string pathTo, SDL_Renderer* renderer)
 {
+	// Free previous texture
 	free();
 
 	//Load image at specified path

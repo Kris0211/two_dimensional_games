@@ -19,8 +19,9 @@ public:
 	float length() const;
 	void normalize();
 
-	static float dotProduct(const Vector2D& v1, const Vector2D& v2);
-	static float angleBetween(const Vector2D& v1, const Vector2D& v2);
+	static Vector2D clamp(const Vector2D &v, const Vector2D &min, const Vector2D &max);
+	static float dotProduct(const Vector2D &v1, const Vector2D &v2);
+	static float angleBetween(const Vector2D &v1, const Vector2D &v2);
 
 	float x, y;
 };
