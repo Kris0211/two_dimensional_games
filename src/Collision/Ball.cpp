@@ -3,18 +3,15 @@
 #include "Box.h"
 #include "CollisionManager.h"
 
-Ball::Ball(SDL_Renderer* renderer, Sprite* sprite, const Vector2D &position, const Vector2D &velocity)
+Ball::Ball(SDL_Renderer* renderer, float radius, const Vector2D &position)
 {
 	this->renderer = renderer;
-	this->ballSprite = sprite;
-	this->radius = static_cast<float>(sprite->getWidth()) / 2.0f;
+	this->radius = radius;
 	this->position = position;
 }
 
 Ball::~Ball()
 {
-	ballSprite->free();
-	ballSprite = nullptr;
 	renderer = nullptr;
 }
 

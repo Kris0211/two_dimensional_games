@@ -1,7 +1,8 @@
 #pragma once
 #include <SDL.h>
-#include "PlayerCharacter.h"
-#include "Vector2D.h"
+
+#include "../Pawn/PlayerCharacter.h"
+#include "../Math/Vector2D.h"
 
 class PlayerCharacter;
 

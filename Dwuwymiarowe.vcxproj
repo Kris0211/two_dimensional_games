@@ -19,30 +19,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Box.cpp" />
-    <ClCompile Include="src\CollisionManager.cpp" />
-    <ClCompile Include="src\AnimSprite.cpp" />
-    <ClCompile Include="src\Ball.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Collision\Box.cpp" />
+    <ClCompile Include="src\Collision\CollisionManager.cpp" />
+    <ClCompile Include="src\Display\AnimSprite.cpp" />
+    <ClCompile Include="src\Collision\Ball.cpp" />
+    <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\MultiplayerCamera.cpp" />
-    <ClCompile Include="src\PlayerCharacter.cpp" />
-    <ClCompile Include="src\Sprite.cpp" />
-    <ClCompile Include="src\TileSet.cpp" />
-    <ClCompile Include="src\Vector2D.cpp" />
+    <ClCompile Include="src\Camera\MultiplayerCamera.cpp" />
+    <ClCompile Include="src\Pawn\PlayerCharacter.cpp" />
+    <ClCompile Include="src\Display\Sprite.cpp" />
+    <ClCompile Include="src\Display\TileSet.cpp" />
+    <ClCompile Include="src\Math\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Box.h" />
-    <ClInclude Include="src\CollisionManager.h" />
-    <ClInclude Include="src\CollisionBody.h" />
-    <ClInclude Include="src\AnimSprite.h" />
-    <ClInclude Include="src\Ball.h" />
-    <ClInclude Include="src\Camera.h" />
-    <ClInclude Include="src\MultiplayerCamera.h" />
-    <ClInclude Include="src\PlayerCharacter.h" />
-    <ClInclude Include="src\Sprite.h" />
-    <ClInclude Include="src\TileSet.h" />
-    <ClInclude Include="src\Vector2D.h" />
+    <ClInclude Include="src\Collision\Box.h" />
+    <ClInclude Include="src\Collision\CollisionManager.h" />
+    <ClInclude Include="src\Collision\CollisionBody.h" />
+    <ClInclude Include="src\Display\AnimSprite.h" />
+    <ClInclude Include="src\Collision\Ball.h" />
+    <ClInclude Include="src\Camera\Camera.h" />
+    <ClInclude Include="src\Camera\MultiplayerCamera.h" />
+    <ClInclude Include="src\Pawn\PlayerCharacter.h" />
+    <ClInclude Include="src\Display\Sprite.h" />
+    <ClInclude Include="src\Display\TileSet.h" />
+    <ClInclude Include="src\Math\Vector2D.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

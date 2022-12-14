@@ -1,21 +1,19 @@
 #pragma once
-#include "Camera.h"
-#include "CollisionBody.h"
-#include "Sprite.h"
-#include "Vector2D.h"
+#include "../Camera/Camera.h"
+#include "../Collision/CollisionBody.h"
+#include "../Display/Sprite.h"
+#include "../Math/Vector2D.h"
 
 class Camera;
 
 class PlayerCharacter
 {
-public:
-	~PlayerCharacter();
-	
+public:	
 	PlayerCharacter(Sprite* sprite, const Vector2D &pos, float speed = 1.0);
-
 	PlayerCharacter(Sprite* sprite, const Vector2D &pos, CollisionBody* collider, float speed = 1.0);
-	
 	PlayerCharacter(Sprite* sprite, float x, float y, float speed = 1.0);
+
+	~PlayerCharacter();
 
 	void free();
 
@@ -28,7 +26,6 @@ public:
 	Vector2D getPosition();
 
 	void setPosition(const Vector2D &pos);
-
 	void setPosition(float x, float y);
 
 	void setSprite(Sprite* sprite);
@@ -47,7 +44,6 @@ private:
 	CollisionBody* collisionBody;
 	
 	Vector2D position;
-	
 	Vector2D velocity;
 
 	float speedMultiplier;

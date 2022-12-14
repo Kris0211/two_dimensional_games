@@ -1,4 +1,5 @@
 #include "MultiplayerCamera.h"
+#include "../Math/Vector2D.h"
 
 MultiplayerCamera::MultiplayerCamera()
 {

@@ -1,5 +1,6 @@
 #pragma once
-#include "Vector2D.h"
+#include <SDL.h>
+#include "../Math/Vector2D.h"
 
 class CollisionBody
 {
@@ -17,5 +18,8 @@ public:
 protected:
 	bool rigid = true;
 	Vector2D position;
+
+	const int SCREEN_WIDTH = 1200;
+	const int SCREEN_HEIGHT = 800;
 };
 

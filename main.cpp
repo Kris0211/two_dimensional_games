@@ -2,23 +2,22 @@
 #include <chrono>
 #include <string>
 #include <fstream>
-
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "src/Ball.h"
-#include "src/MultiplayerCamera.h"
-#include "src/PlayerCharacter.h"
-#include "src/Sprite.h"
-#include "src/TileSet.h"
-#include "src/Vector2D.h"
+#include "src/Collision/Ball.h"
+#include "src/Camera/MultiplayerCamera.h"
+#include "src/Display/Sprite.h"
+#include "src/Display/TileSet.h"
+#include "src/Math/Vector2D.h"
+#include "src/Pawn/PlayerCharacter.h"
 
 constexpr int TILE_SIZE = 64;
 constexpr int TILEMAP_WIDTH = 42;
 constexpr int TILEMAP_HEIGHT = 21;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
 constexpr int SCREEN_WIDTH = 1200;
-constexpr int SCREEN_HEIGHT = 900;
+constexpr int SCREEN_HEIGHT = 800;
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;

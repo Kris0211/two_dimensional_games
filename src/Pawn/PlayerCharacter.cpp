@@ -1,7 +1,8 @@
 #pragma once
 #include "PlayerCharacter.h"
 
-#include "CollisionManager.h"
+#include "../Collision/CollisionBody.h"
+#include "../Collision/CollisionManager.h"
 
 PlayerCharacter::~PlayerCharacter()
 {
