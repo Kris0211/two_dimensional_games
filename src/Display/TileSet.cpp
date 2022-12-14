@@ -27,7 +27,7 @@ TileSet::TileSet(const std::vector<Sprite*>& tiles, std::string pathTo, int tile
 						row.push_back(0);
 						break;
 					}
-					case 'i':
+					case '1':
 					{
 						row.push_back(1);
 						break;

@@ -13,8 +13,8 @@
 #include "src/Pawn/PlayerCharacter.h"
 
 constexpr int TILE_SIZE = 64;
-constexpr int TILEMAP_WIDTH = 42;
-constexpr int TILEMAP_HEIGHT = 21;
+constexpr int TILEMAP_WIDTH = 16;
+constexpr int TILEMAP_HEIGHT = 16;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
 constexpr int SCREEN_WIDTH = 1200;
 constexpr int SCREEN_HEIGHT = 800;
@@ -74,41 +74,35 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	
-	Sprite saul;
+	Sprite walterbox;
 	Sprite saulball;
-	Sprite godot;
-	Sprite thevoid;
-	Sprite walter;
-
-	if (!saul.loadFromFile("res/img/saul.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
+	Sprite grass;
+	Sprite cobble;
 
 	if (!saulball.loadFromFile("res/img/saul_but_ball.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!thevoid.loadFromFile("res/img/void.png", defaultRenderer)) {
+	if (!walterbox.loadFromFile("res/img/heisenberg.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!walter.loadFromFile("res/img/walter.png", defaultRenderer)) {
+	if (!grass.loadFromFile("res/img/grass.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!godot.loadFromFile("res/img/icon.png", defaultRenderer)) {
+	if (!cobble.loadFromFile("res/img/cobblestone.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 	
-	PlayerCharacter player1(&godot, Vector2D(400.0, 300.0));
+	PlayerCharacter player1(&walterbox, Vector2D(400.0, 300.0));
 	PlayerCharacter player2(&saulball, Vector2D(500.0, 300.0));
 
-	std::vector<Sprite*> spritemap = { &thevoid, &walter, &walter, &walter };
+	std::vector<Sprite*> spritemap = { &grass, &cobble };
 
 	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
 
@@ -164,9 +158,11 @@ int main(int argc, char* argv[])
 	player2.free();
 	player1.free();
 
-	saul.free();
-	walter.free();
-	godot.free();
+	walterbox.free();
+	saulball.free();
+	grass.free();
+	cobble.free();
+	
 	tilemap.free();
 
 	close();
