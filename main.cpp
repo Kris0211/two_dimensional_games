@@ -13,8 +13,8 @@
 #include "src/Pawn/PlayerCharacter.h"
 
 constexpr int TILE_SIZE = 64;
-constexpr int TILEMAP_WIDTH = 16;
-constexpr int TILEMAP_HEIGHT = 16;
+constexpr int TILEMAP_WIDTH = 20;
+constexpr int TILEMAP_HEIGHT = 20;
 const int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
 constexpr int SCREEN_WIDTH = 1200;
 constexpr int SCREEN_HEIGHT = 800;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
 	std::vector<Sprite*> spritemap = { &grass, &cobble };
 
-	TileSet tilemap(spritemap, "res/lvl/level1.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
+	TileSet tilemap(spritemap, "res/lvl/level2.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
 
 	player1.setMovementSpeed(2.0f);
 	player2.setMovementSpeed(2.0f);

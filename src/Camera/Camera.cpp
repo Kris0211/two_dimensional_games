@@ -30,11 +30,9 @@ float Camera::getX() const { return position.x; }
 
 float Camera::getY() const { return position.y; }
 
-double Camera::getScale() const { return scale; }
+double Camera::getZoom() const { return zoom; }
 
-double Camera::getScaleFactor() const { return scaleFactor; }
-
-void Camera::setScaleFactor(const double factor) { scaleFactor = factor; }
+void Camera::setMaxZoom(const double newZoom) { maxZoom = newZoom; }
 
 
 void Camera::run(double delta)

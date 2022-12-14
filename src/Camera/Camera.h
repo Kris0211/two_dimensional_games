@@ -15,10 +15,9 @@ public:
 
 	float getX() const;
 	float getY() const;
-	double getScale() const;
-	double getScaleFactor() const;
+	double getZoom() const;
 
-	void setScaleFactor(double factor);
+	void setMaxZoom(double newZoom);
 
 	void free();
 
@@ -28,6 +27,6 @@ protected:
 	PlayerCharacter* trackedPlayer;
 	SDL_Window* window;
 	Vector2D position;
-	double scale = 1.0;
-	double scaleFactor = 0.00035;
+	double zoom = 1.0;
+	double maxZoom = 1.0;
 };

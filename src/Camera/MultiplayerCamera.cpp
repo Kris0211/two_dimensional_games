@@ -33,15 +33,8 @@ void MultiplayerCamera::run(double delta)
 	int windowSizeX, windowSizeY;
 	SDL_GetWindowSize(window, &windowSizeX, &windowSizeY);
 
-	int distSquared = (secondPlayer->getPosition().x - trackedPlayer->getPosition().x) * (secondPlayer->getPosition().x - trackedPlayer->getPosition().x) +
-		(secondPlayer->getPosition().y - trackedPlayer->getPosition().y) * (secondPlayer->getPosition().y - trackedPlayer->getPosition().y);
-
-	//Vector2D trackedPosition = distSquared > distanceTreshold ? (trackedPlayer->getPosition() * 3  + secondPlayer->getPosition()) / 4
-	//	: (trackedPlayer->getPosition() + secondPlayer->getPosition()) / 2;
-
-	Vector2D trackedPosition = (trackedPlayer->getPosition() + secondPlayer->getPosition()) / 2;
-
-	//trackedPosition = (trackedPlayer->getPosition() * 2 + secondPlayer->getPosition()) / 3;
+	Vector2D windowRect(windowSizeX, windowSizeY);
+	Vector2D trackedPosition = (trackedPlayer->getPosition() + secondPlayer->getPosition()) * 0.5;
 
 	if (trackedPosition.y < position.y + static_cast<float>(windowSizeY) * 0.3f)
 	{
@@ -54,11 +47,12 @@ void MultiplayerCamera::run(double delta)
 	}
 
 	position.x = position.x + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.x);
+	//position.y = position.y + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.y);
 
-	scale = 1.0 - std::max(abs(trackedPlayer->getPosition().x - secondPlayer->getPosition().x),
-		abs(trackedPlayer->getPosition().y - secondPlayer->getPosition().y)) * scaleFactor;
-		//distSquared > distanceTreshold ? : 0.906; //Don't ask why, I don't know either.
-	//printf("%f", scale);
+
+	zoom = (windowSizeY - 128) / (trackedPlayer->getPosition() - secondPlayer->getPosition()).length();
+	if (zoom > maxZoom) zoom = maxZoom;
+
 }
 
-void MultiplayerCamera::setDistanceTreshold(int treshold) { distanceTreshold = treshold; }
+

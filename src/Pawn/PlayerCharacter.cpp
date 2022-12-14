@@ -77,7 +77,7 @@ void PlayerCharacter::render(SDL_Renderer* renderer, const Camera &cam) const
 {
 	playerSprite->render(static_cast<int>(static_cast<float>(position.x) - cam.getX()), 
 		static_cast<int>(static_cast<float>(position.y) - cam.getY()),
-		cam.getScale(), renderer);
+		cam.getZoom(), renderer);
 }
 
 Vector2D PlayerCharacter::getPosition() { return position; }
