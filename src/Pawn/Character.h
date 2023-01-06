@@ -27,12 +27,6 @@ public:
 
 	void setCollider(CollisionBody* collider);
 
-	Vector2D getPosition() const;
-
-	void setPosition(const Vector2D &pos);
-
-	Vector2D getVelocity() const;
-
 	void setName(std::string name);
 
 	std::string getName() const;
@@ -41,13 +35,14 @@ public:
 
 	void setSpeed(float newSpeed);
 
+	//this is public to make our life easier with collisions
+	Vector2D position;
+	Vector2D velocity;
+
 protected:
 	Sprite* sprite;
 
 	CollisionBody* collider;
-	
-	Vector2D position;
-	Vector2D velocity;
 
 	std::string charName;
 

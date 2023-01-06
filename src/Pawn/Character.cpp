@@ -48,12 +48,6 @@ void Character::setSprite(Sprite* sprite) { this->sprite = sprite; }
 
 void Character::setCollider(CollisionBody* collider) { this->collider = collider; }
 
-Vector2D Character::getPosition() const { return position; }
-
-void Character::setPosition(const Vector2D &pos) { position = pos; }
-
-Vector2D Character::getVelocity() const { return velocity; }
-
 void Character::setName(std::string name) { charName = name; }
 
 std::string Character::getName() const { return charName; }

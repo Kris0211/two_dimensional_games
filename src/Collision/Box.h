@@ -5,10 +5,14 @@
 class Box : public CollisionBody
 {
 public:
-	Box(SDL_Renderer* renderer, const Vector2D &rect, const Vector2D &position = Vector2D(0, 0));
+	Box(const Vector2D &rect, bool isRigid);
+	Box(const Vector2D &fixedPos, const Vector2D &rect, bool isRigid);
 	~Box() override;
 
 	void collide(bool separation = true, bool reflection = true) override;
 
+	Vector2D getRect() const;
 
+private:
+	Vector2D rect;
 };

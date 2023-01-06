@@ -33,7 +33,7 @@ public:
 
 protected:
 	bool rigid = true;
-	Character* character;
+	Character* character = nullptr;
 	Vector2D position;
 	BodyType type;
 

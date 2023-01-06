@@ -20,7 +20,7 @@ void Ball::collide(const bool separation, const bool reflection)
 		Character* character = this->getCharacter();
 		if (collider->getCharacter() != nullptr)
 		{
-			colliderPos = collider->getCharacter()->getPosition();
+			colliderPos = collider->getCharacter()->position;
 		}
 		else
 		{
@@ -31,22 +31,22 @@ void Ball::collide(const bool separation, const bool reflection)
 		{
 			ballCollider = dynamic_cast<Ball*>(collider);
 			
-			Vector2D vec = (this->getCharacter()->getPosition() - colliderPos);
+			Vector2D vec = (this->getCharacter()->position - colliderPos);
 			float dist = static_cast<float>(vec.length());
 			if (dist < radius + ballCollider->getRadius())
 			{
 				vec.normalize();
 				if (separation)
 				{
-					character->getPosition() += vec * (ballCollider->getRadius() - dist * 0.5);
-					collider->getCharacter()->getPosition() -= vec * (this->getRadius() - dist * 0.5);
+					character->position += vec * (ballCollider->getRadius() - dist * 0.5);
+					collider->getCharacter()->position -= vec * (this->getRadius() - dist * 0.5);
 				}
 
 				if (reflection)
 				{
-					character->getVelocity() = character->getVelocity() - vec * Vector2D::dotProduct(character->getVelocity(), vec) * 2.0;
+					character->velocity = character->velocity - vec * Vector2D::dotProduct(character->velocity, vec) * 2.0;
 					vec *= -1.0f;
-					collider->getCharacter()->getVelocity() = ballCollider->getCharacter()->getVelocity() - vec * Vector2D::dotProduct(ballCollider->getCharacter()->getVelocity(), vec) * 2.0;
+					collider->getCharacter()->velocity = ballCollider->getCharacter()->velocity - vec * Vector2D::dotProduct(ballCollider->getCharacter()->velocity, vec) * 2.0;
 				}
 
 				if (collider->getCharacter() != nullptr) 
@@ -60,20 +60,20 @@ void Ball::collide(const bool separation, const bool reflection)
 			boxCollider = dynamic_cast<Box*>(collider);
 
 			Vector2D f;
-			f = Vector2D::clamp(character->getPosition(), colliderPos - boxCollider->getRect() * 0.5, colliderPos + boxCollider->getRect() * 0.5);
-			if ((character->getPosition() - f).length() < radius)
+			f = Vector2D::clamp(character->position, colliderPos - boxCollider->getRect() * 0.5, colliderPos + boxCollider->getRect() * 0.5);
+			if ((character->position - f).length() < radius)
 			{
-				if (character->getPosition() != f)
+				if (character->position != f)
 				{
-					Vector2D vec = (character->getPosition() - f).normal() * (radius - (character->getPosition() - f).length());
+					Vector2D vec = (character->position - f).normal() * (radius - (character->position - f).length());
 					if (collider->isRigid() && collider->getCharacter() != nullptr)
 					{
-						character->getPosition() -= vec * 0.5;
-						collider->getCharacter()->getPosition() += vec * 0.5;
+						character->position -= vec * 0.5;
+						collider->getCharacter()->position += vec * 0.5;
 					}
 					else
 					{
-						character->getPosition() += vec;
+						character->position += vec;
 					}
 				}
 
