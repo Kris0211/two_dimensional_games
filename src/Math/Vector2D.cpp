@@ -8,6 +8,16 @@ Vector2D::Vector2D(const float x, const float y) : x(x), y(y) {}
 
 Vector2D::Vector2D(const Vector2D& v) : x(v.x), y(v.y) {}
 
+bool Vector2D::operator==(const Vector2D &v)
+{
+	return x == v.x && y == v.y;
+}
+
+bool Vector2D::operator!=(const Vector2D &v)
+{
+	return x != v.x || y != v.y;
+}
+
 Vector2D Vector2D::operator+(const Vector2D &v) const
 {
 	return {x + v.x, y + v.y};
@@ -76,6 +86,14 @@ void Vector2D::normalize()
 		this->x /= n;
 		this->y /= n;
 	}
+}
+
+Vector2D Vector2D::normal() const
+{
+	const float n = this->length();
+	Vector2D vec = *this;
+	if (n != 0.0f) vec /= n;
+	return vec;
 }
 
 Vector2D Vector2D::clamp(const Vector2D &v, const Vector2D &min, const Vector2D &max)

@@ -10,7 +10,9 @@
 #include "src/Display/Sprite.h"
 #include "src/Display/TileSet.h"
 #include "src/Math/Vector2D.h"
-#include "src/Pawn/PlayerCharacter.h"
+#include "src/Pawn/Character.h"
+#include "src/Pawn/KeyboardPlayer.h"
+#include "src/Pawn/ArrowsPlayer.h"
 
 constexpr int TILE_SIZE = 64;
 constexpr int TILEMAP_WIDTH = 20;
@@ -99,15 +101,12 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 	
-	PlayerCharacter player1(&walterbox, Vector2D(400.0, 300.0));
-	PlayerCharacter player2(&saulball, Vector2D(500.0, 300.0));
+	KeyboardPlayer player1(&walterbox, Vector2D(400.0, 300.0));
+	ArrowsPlayer player2(&saulball, Vector2D(500.0, 300.0));
 
 	std::vector<Sprite*> spritemap = { &grass, &cobble };
 
 	TileSet tilemap(spritemap, "res/lvl/level2.lvl", TILEMAP_WIDTH, TILEMAP_HEIGHT);
-
-	player1.setMovementSpeed(2.0f);
-	player2.setMovementSpeed(2.0f);
 
 	// Delta time
 	Uint64 now = SDL_GetPerformanceCounter();
@@ -133,8 +132,8 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT) run = false;
 		}
 
-		player1.move(deltaTime, false);
-		player2.move(deltaTime, true);
+		player1.move(deltaTime);
+		player2.move(deltaTime);
 		cam.run(deltaTime);
 
 		//RENDERING

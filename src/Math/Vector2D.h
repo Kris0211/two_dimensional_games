@@ -6,7 +6,10 @@ public:
 	Vector2D();
 	Vector2D(float x, float y);
 	Vector2D(const Vector2D& v);
-	
+
+	bool operator==(const Vector2D &v);
+	bool operator!=(const Vector2D &v);
+
 	Vector2D operator+(const Vector2D &v) const;
 	Vector2D operator-(const Vector2D &v) const;
 	void operator+=(const Vector2D &v);
@@ -18,6 +21,7 @@ public:
 
 	float length() const;
 	void normalize();
+	Vector2D normal() const;
 
 	static Vector2D clamp(const Vector2D &v, const Vector2D &min, const Vector2D &max);
 	static float dotProduct(const Vector2D &v1, const Vector2D &v2);

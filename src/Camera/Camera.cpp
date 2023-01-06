@@ -8,7 +8,7 @@ Camera::Camera()
 	this->position = Vector2D(0, 0);
 }
 
-Camera::Camera(PlayerCharacter* player, SDL_Window* window)
+Camera::Camera(Character* player, SDL_Window* window)
 {
 	this->trackedPlayer = player;
 	this->window = window;

@@ -4,7 +4,7 @@ class MultiplayerCamera : public Camera
 {
 public:
 	MultiplayerCamera();
-	MultiplayerCamera(PlayerCharacter* firstPlayer, PlayerCharacter* secondPlayer, SDL_Window* window);
+	MultiplayerCamera(Character* firstPlayer, Character* secondPlayer, SDL_Window* window);
 	~MultiplayerCamera();
 
 	void free();
@@ -12,6 +12,6 @@ public:
 	void run(double delta);
 
 protected:
-	PlayerCharacter* secondPlayer;
+	Character* secondPlayer;
 };
 

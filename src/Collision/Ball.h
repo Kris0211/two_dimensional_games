@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 #include <SDL.h>
 
 #include "CollisionBody.h"
@@ -8,20 +8,14 @@
 class Ball : public CollisionBody
 {
 public:
-	Ball(SDL_Renderer* renderer, float radius, const Vector2D &position = Vector2D(0, 0));
-	~Ball() override;
+	Ball(float radius, bool isRigid);
+	Ball(Vector2D fixedPosition, float radius, bool isRigid);
+	~Ball() = default;
 
-	void collide(bool separation = true, bool reflection = true) override;
+	virtual void collide(bool separation = true, bool reflection = true) override;
 
-	Vector2D getPosition() const;
-	void setPosition(Vector2D position);
-	void setScale(float scale);
+	float getRadius() const;
 
 private:
-	SDL_Renderer* renderer;
-
 	float radius = 10.0f;
-	float scale = 1.0f;
-
-	Vector2D position;
 };

@@ -1,16 +1,16 @@
 #pragma once
 #include <SDL.h>
 
-#include "../Pawn/PlayerCharacter.h"
+#include "../Pawn/Character.h"
 #include "../Math/Vector2D.h"
 
-class PlayerCharacter;
+class Character;
 
 class Camera
 {
 public:
 	Camera();
-	Camera(PlayerCharacter* player, SDL_Window* window);
+	Camera(Character* player, SDL_Window* window);
 	~Camera();
 
 	float getX() const;
@@ -24,7 +24,7 @@ public:
 	void run(double delta);
 
 protected:
-	PlayerCharacter* trackedPlayer;
+	Character* trackedPlayer;
 	SDL_Window* window;
 	Vector2D position;
 	double zoom = 1.0;

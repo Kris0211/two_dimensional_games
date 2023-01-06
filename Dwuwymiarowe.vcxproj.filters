@@ -24,7 +24,7 @@
     <ClCompile Include="src\Display\AnimSprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Pawn\PlayerCharacter.cpp">
+    <ClCompile Include="src\Pawn\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Vector2D.cpp">
@@ -56,7 +56,7 @@
     <ClInclude Include="src\Display\AnimSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Pawn\PlayerCharacter.h">
+    <ClInclude Include="src\Pawn\Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Vector2D.h">

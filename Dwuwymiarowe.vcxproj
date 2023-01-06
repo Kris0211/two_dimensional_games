@@ -26,7 +26,7 @@
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Camera\MultiplayerCamera.cpp" />
-    <ClCompile Include="src\Pawn\PlayerCharacter.cpp" />
+    <ClCompile Include="src\Pawn\Character.cpp" />
     <ClCompile Include="src\Display\Sprite.cpp" />
     <ClCompile Include="src\Display\TileSet.cpp" />
     <ClCompile Include="src\Math\Vector2D.cpp" />
@@ -39,7 +39,7 @@
     <ClInclude Include="src\Collision\Ball.h" />
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Camera\MultiplayerCamera.h" />
-    <ClInclude Include="src\Pawn\PlayerCharacter.h" />
+    <ClInclude Include="src\Pawn\Character.h" />
     <ClInclude Include="src\Display\Sprite.h" />
     <ClInclude Include="src\Display\TileSet.h" />
     <ClInclude Include="src\Math\Vector2D.h" />

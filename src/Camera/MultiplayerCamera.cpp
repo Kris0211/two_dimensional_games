@@ -9,7 +9,7 @@ MultiplayerCamera::MultiplayerCamera()
 	this->position = Vector2D(0, 0);
 }
 
-MultiplayerCamera::MultiplayerCamera(PlayerCharacter* firstPlayer, PlayerCharacter* secondPlayer, SDL_Window* window)
+MultiplayerCamera::MultiplayerCamera(Character* firstPlayer, Character* secondPlayer, SDL_Window* window)
 {
 	this->trackedPlayer = firstPlayer;
 	this->secondPlayer = secondPlayer;
@@ -48,7 +48,6 @@ void MultiplayerCamera::run(double delta)
 
 	position.x = position.x + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.x);
 	//position.y = position.y + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.y);
-
 
 	zoom = (windowSizeY - 128) / (trackedPlayer->getPosition() - secondPlayer->getPosition()).length();
 	if (zoom > maxZoom) zoom = maxZoom;
