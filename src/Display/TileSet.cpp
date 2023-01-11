@@ -1,10 +1,14 @@
 #include "TileSet.h"
+#include "../Collision/CollisionManager.h"
+#include "../Collision/Box.h"
 #include <fstream>
 
-TileSet::TileSet(const std::vector<Sprite*> &tiles, std::string pathTo, int tilemap_width, int tilemap_height)
+TileSet::TileSet(const std::vector<Sprite*> &tiles, const std::vector<bool>& tileCollision, std::string pathTo)
 {
-	this->width = tilemap_width;
-	this->height = tilemap_height;
+	this->width = TILEMAP_WIDTH;
+	this->height = TILEMAP_HEIGHT;
+	this->tileCollision = tileCollision;
+
 	for (Sprite* sprite : tiles)
 	{
 		tileSprites.push_back(sprite);
@@ -21,12 +25,12 @@ TileSet::TileSet(const std::vector<Sprite*> &tiles, std::string pathTo, int tile
 			{
 				switch (chr)
 				{
-					case '0':
+					case '.':
 					{
 						row.push_back(0);
 						break;
 					}
-					case '1':
+					case '+':
 					{
 						row.push_back(1);
 						break;
@@ -45,15 +49,42 @@ void TileSet::free()
 	for (Sprite* sprite : tileSprites)
 	{
 		sprite->free();
+		sprite = nullptr;
 	}
 }
 
-void TileSet::render(SDL_Renderer* renderer, Camera cam, int tileSize) const
+void TileSet::render(SDL_Renderer* renderer, const Camera &cam) const
 {
 	for (int i = 0; i < width; i++)
 	{
 		for (int k = 0; k < height; k++) {
-			tileSprites[levelLayout[k][i]]->render(tileSize * i - cam.getX(), tileSize * k - cam.getY(), cam.getZoom(), renderer);
+			tileSprites[levelLayout[k][i]]->render(TILE_SIZE * i - cam.getX(), TILE_SIZE * k - cam.getY(), cam.getZoom(), renderer);
+		}
+	}
+}
+
+void TileSet::generateCollision()
+{
+	if (!tileCollision.empty())
+	{
+		for (CollisionBody* c : colliders)
+		{
+			delete c;
+			CollisionManager::removeCollider(c);
+		}
+		colliders.clear();
+	}
+
+	for (int y = 0; y < levelLayout.size(); y++)
+	{
+		for (int x = 0; x < levelLayout[y].size(); x++)
+		{
+			if (tileCollision[levelLayout[y][x]])
+			{
+				CollisionBody* c = new Box(Vector2D(x * TILE_SIZE, y * TILE_SIZE), Vector2D(TILE_SIZE, TILE_SIZE), false);
+				CollisionManager::addCollider(c);
+				colliders.push_back(c);
+			}
 		}
 	}
 }

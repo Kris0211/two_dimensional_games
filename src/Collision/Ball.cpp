@@ -6,7 +6,7 @@
 
 Ball::Ball(float radius, bool isRigid) : CollisionBody(isRigid, BALL), radius(radius) {}
 
-Ball::Ball(const Vector2D &fixedPosition, float radius, bool isRigid) : CollisionBody(fixedPosition, isRigid, BALL) {}
+Ball::Ball(const Vector2D &fixedPosition, float radius, bool isRigid) : CollisionBody(fixedPosition, isRigid, BALL), radius(radius) {}
 
 void Ball::collide(const bool separation, const bool reflection)
 {

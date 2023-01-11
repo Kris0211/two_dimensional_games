@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "../../Config.h"
 #include "../Camera/Camera.h"
 #include "../Collision/CollisionBody.h"
 #include "../Display/Sprite.h"
@@ -22,6 +23,8 @@ public:
 	
 	virtual void render(SDL_Renderer* renderer, const Camera &cam) const;
 
+	virtual void collision() {}
+
 	virtual void collision(Character* character) {}
 
 
@@ -39,7 +42,7 @@ public:
 
 	//this is public to make our life easier with collisions
 	Vector2D position;
-	Vector2D velocity;
+	Vector2D velocity = Vector2D(0.0f, 0.0f);
 
 protected:
 	Sprite* sprite;

@@ -7,8 +7,8 @@ void ArrowsPlayer::move(double deltaTime)
 {
 	const Uint8* keyboard = SDL_GetKeyboardState(nullptr);
 	velocity.x = static_cast<float>(keyboard[SDL_SCANCODE_RIGHT] - keyboard[SDL_SCANCODE_LEFT]);
-	velocity.y = static_cast<float>(keyboard[SDL_SCANCODE_DOWN] - keyboard[SDL_SCANCODE_UP]);
+	velocity.y = gravity;
 	velocity.normalize();
-	velocity *= speed * deltaTime;
+	velocity *= speed * static_cast<float>(deltaTime);
 	position += velocity;
 }

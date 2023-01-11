@@ -1,28 +1,26 @@
 #include <cstdio>
 #include <chrono>
 #include <string>
-#include <fstream>
+#include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "src/Collision/Ball.h"
-#include "src/Camera/MultiplayerCamera.h"
 #include "src/Collision/Box.h"
 #include "src/Display/Sprite.h"
 #include "src/Display/TileSet.h"
 #include "src/Math/Vector2D.h"
 #include "src/Pawn/Character.h"
 #include "src/Pawn/KeyboardPlayer.h"
-#include "src/Pawn/ArrowsPlayer.h"
 #include "Config.h"
 #include "src/Collision/CollisionManager.h"
-#include "src/Display/TargetArrow.h"
-#include "src/Level/LevelGenerator.h"
-#include "src/Pawn/Target.h"
 
 SDL_Window* window = nullptr;
 SDL_Surface* bg = nullptr;
 SDL_Renderer* defaultRenderer = nullptr;
+
+double jumpHeight = JUMP_HEIGHT;
+double jumpRange = JUMP_RANGE;
+double jumpTime = JUMP_TIME;
 
 /**
  * \brief Initialize the game window
@@ -36,7 +34,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 7", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -76,28 +74,15 @@ int main(int argc, char* argv[])
 	}
 	
 	Sprite walterbox;
-	Sprite saulball;
-	Sprite coin;
-	Sprite grass;
+	Sprite sky;
 	Sprite cobble;
-	Sprite arrow;
 
-	if (!saulball.loadFromFile("res/img/saulball_small.png", defaultRenderer)) {
+	if (!walterbox.loadFromFile("res/img/heisenberg_medium.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!walterbox.loadFromFile("res/img/heisenberg_small.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!coin.loadFromFile("res/img/coin.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-
-	if (!grass.loadFromFile("res/img/grass.png", defaultRenderer)) {
+	if (!sky.loadFromFile("res/img/sky.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -106,24 +91,18 @@ int main(int argc, char* argv[])
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
-
-	if (!arrow.loadFromFile("res/img/arrow.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
 	
-	std::vector<Sprite*> tileMap = { &cobble, &grass };
-	std::vector<bool> tileColliders = { true, false };
+	std::vector<Sprite*> tileMap = { &sky, &cobble, };
+	std::vector<bool> tileColliders = { false, true };
+		
+	KeyboardPlayer player1(&walterbox, Vector2D(64.0f, -128.0f), new Box(Vector2D(56.0f, 56.0f), true));
 
-	LevelGenerator level(tileMap, tileColliders, defaultRenderer);
-	level.generateLevel(10);
-	
-	KeyboardPlayer player1(&walterbox, Vector2D(400.0, 300.0), new Box(Vector2D(50.0f, 50.0f), true));
-	ArrowsPlayer player2(&saulball, Vector2D(500.0, 300.0), new Ball(20.0f, true));
-	Target target(&coin, new Ball(40.0f, true), &player1, &player2, &level);
+	TileSet level(tileMap, tileColliders, "res/lvl/level.lvl");
+	level.generateCollision();
 
-	TargetArrow targetArrow(&arrow, &target);
-	MultiplayerCamera cam(&player1, &player2, window);
+	Camera cam(&player1, window);
+
+	player1.calculatePhysics(jumpHeight, jumpRange);
 	
 	// Delta time
 	Uint64 now = SDL_GetPerformanceCounter();
@@ -133,7 +112,6 @@ int main(int argc, char* argv[])
 	bool run = true;
 
 	srand(time(nullptr));
-	target.nextLevel();
 
 	// Main game loop
 	while (run)
@@ -148,6 +126,39 @@ int main(int argc, char* argv[])
 		{
 			// Close game on quit
 			if (event.type == SDL_QUIT) run = false;
+
+			// Jump logic
+			if (event.type == SDL_KEYDOWN)
+			{
+				if (event.key.keysym.sym == SDLK_w)
+				{
+					player1.jump();
+				}
+				if (event.key.keysym.sym == SDLK_1)
+				{
+					jumpHeight += 32;
+					std::cout << "Jump height: " << jumpHeight << "\n";
+					player1.calculatePhysics(jumpHeight, jumpRange);
+				}
+				if (event.key.keysym.sym == SDLK_2)
+				{
+					jumpHeight -= 32;
+					std::cout << "Jump height: " << jumpHeight << "\n";
+					player1.calculatePhysics(jumpHeight, jumpRange);
+				}
+				if (event.key.keysym.sym == SDLK_3)
+				{
+					jumpRange += 8;
+					std::cout << "Jump range: " << jumpRange << "\n";
+					player1.calculatePhysics(jumpHeight, jumpRange);
+				}
+				if (event.key.keysym.sym == SDLK_4)
+				{
+					jumpRange -= 8;
+					std::cout << "Jump range: " << jumpRange << "\n";
+					player1.calculatePhysics(jumpHeight, jumpRange);
+				}
+			}
 		}
 		
 		//Background color
@@ -155,32 +166,26 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(defaultRenderer);
 
 		player1.move(deltaTime);
-		player2.move(deltaTime);
 		cam.run();
 
 		CollisionManager::handleCollisions();
 
-		// Render players
+		//Render level
 		level.render(defaultRenderer, cam);
+
+		//Render players
 		player1.render(defaultRenderer, cam);
-		player2.render(defaultRenderer, cam);
-		target.render(defaultRenderer, cam);
-		//targetArrow.render(defaultRenderer, window, cam); //This does not work as it should.
-
-		if (target.touched) target.nextLevel();
-
+				
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
 	}
 	
 	// Clean up before closing
 	cam.free();
-	player2.free();
 	player1.free();
 
 	walterbox.free();
-	saulball.free();
-	grass.free();
+	sky.free();
 	cobble.free();
 
 	close();

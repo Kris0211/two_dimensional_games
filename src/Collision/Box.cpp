@@ -6,8 +6,7 @@
 
 Box::Box(const Vector2D &rect, bool isRigid) : CollisionBody(isRigid, BOX), rect(rect) {}
 
-Box::Box(const Vector2D &fixedPos, const Vector2D &rect, bool isRigid) 
-	: CollisionBody(fixedPos, isRigid, BOX), rect(rect) {}
+Box::Box(const Vector2D &fixedPos, const Vector2D &rect, bool isRigid) : CollisionBody(fixedPos, isRigid, BOX), rect(rect) {}
 
 void Box::collide(bool separation, bool reflection)
 {
@@ -50,6 +49,10 @@ void Box::collide(bool separation, bool reflection)
 				{
 					character->collision(collider->character);
 				}
+				else
+				{
+					character->collision();
+				}
 			}
 		}
 		else // BodyType == BOX
@@ -62,9 +65,15 @@ void Box::collide(bool separation, bool reflection)
 			if (left > 0 && right > 0 && top > 0 && bottom > 0)
 			{
 				Vector2D v = Vector2D(left < right ? -left : right, top < bottom ? -top : bottom);
+				if (abs(v.x) < abs(v.y))
+				{
+					v.y = 0;
+				}
+				else 
+				{
+					v.x = 0;
+				}
 
-				if (abs(v.x) < abs(v.y)) v.y = 0;
-				else v.x = 0;
 				if (collider->isRigid() && collider->character)
 				{
 					character->position += v * 0.5;
@@ -78,6 +87,10 @@ void Box::collide(bool separation, bool reflection)
 				if (collider->character != nullptr)
 				{
 					character->collision(collider->character);
+				}
+				else
+				{
+					character->collision();
 				}
 			}
 		}
