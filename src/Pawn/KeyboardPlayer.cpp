@@ -27,16 +27,12 @@ void KeyboardPlayer::move(double deltaTime)
 	{
 		position.y += velocity.y * deltaTime + accel.y * 0.5 * deltaTime * deltaTime;
 	}
-	else
-	{
-		velocity.y = 0;
-	}
 
 	accel.y = velocity.y > 0 ? gravity * 2 : gravity;
 
 	onGround = false;
 	sinceLastJump += deltaTime;
-	std::cout << onGround << "\n";
+	std::cout << "[" << position.x << "; " << position.y << " ]" << "\n";
 }
 
 void KeyboardPlayer::collision()
