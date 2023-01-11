@@ -12,7 +12,7 @@ void KeyboardPlayer::move(double deltaTime)
 {
 	const Uint8* keyboard = SDL_GetKeyboardState(nullptr);
 	velocity.x = static_cast<float>(keyboard[SDL_SCANCODE_D] - keyboard[SDL_SCANCODE_A]);
-	position.x += velocity.x * static_cast<float>(deltaTime);
+	position.x += velocity.x * deltaTime;
 
 	if (keyboard[SDL_SCANCODE_W] && onGround)
 	{
@@ -20,7 +20,7 @@ void KeyboardPlayer::move(double deltaTime)
 	}
 	else if (!onGround)
 	{
-		velocity.y += accel.y * static_cast<float>(deltaTime);
+		velocity.y += accel.y * deltaTime;
 	}
 
 	if (!onGround)
@@ -29,10 +29,8 @@ void KeyboardPlayer::move(double deltaTime)
 	}
 
 	accel.y = velocity.y > 0 ? gravity * 2 : gravity;
-
 	onGround = false;
 	sinceLastJump += deltaTime;
-	std::cout << "[" << position.x << "; " << position.y << " ]" << "\n";
 }
 
 void KeyboardPlayer::collision()
@@ -45,8 +43,10 @@ void KeyboardPlayer::collision()
 
 void KeyboardPlayer::calculatePhysics(const double height, const double range)
 {
+	jumpHeight = height;
+	jumpRange = range;
 	jumpVelocity = -2.0 * speed * jumpHeight / jumpRange;
-	gravity = 2.0 * jumpHeight / (jumpRange * jumpRange);
+	gravity = 2.0 * (speed * speed) * jumpHeight / (jumpRange * jumpRange);
 	std::cout << "Velocity: " << -jumpVelocity << "\nGravity: " << gravity << "\n";
 }
 

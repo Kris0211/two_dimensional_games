@@ -95,15 +95,13 @@ int main(int argc, char* argv[])
 	std::vector<Sprite*> tileMap = { &sky, &cobble, };
 	std::vector<bool> tileColliders = { false, true };
 		
-	KeyboardPlayer player1(&walterbox, Vector2D(64.0f, -128.0f), new Box(Vector2D(56.0f, 56.0f), true));
+	KeyboardPlayer player1(&walterbox, Vector2D(128.0f, 128.0f), new Box(Vector2D(56.0f, 56.0f), true));
 
 	TileSet level(tileMap, tileColliders, "res/lvl/level.lvl");
 	level.generateCollision();
 
 	Camera cam(&player1, window);
 
-	player1.calculatePhysics(jumpHeight, jumpRange);
-	
 	// Delta time
 	Uint64 now = SDL_GetPerformanceCounter();
 	double deltaTime;
@@ -111,7 +109,7 @@ int main(int argc, char* argv[])
 	SDL_Event event;
 	bool run = true;
 
-	srand(time(nullptr));
+	player1.calculatePhysics(jumpHeight, jumpRange);
 
 	// Main game loop
 	while (run)
@@ -157,6 +155,10 @@ int main(int argc, char* argv[])
 					jumpRange -= 8;
 					std::cout << "Jump range: " << jumpRange << "\n";
 					player1.calculatePhysics(jumpHeight, jumpRange);
+				}
+				if (event.key.keysym.sym == SDLK_r)
+				{
+					player1.position = Vector2D(128.0f, 128.0f);
 				}
 			}
 		}
