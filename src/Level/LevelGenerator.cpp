@@ -35,6 +35,26 @@ void LevelGenerator::generateLevel(const uint8_t size, const bool generateCollis
 	backtrackingGenerator(start, limit, newLayout);
 	layout = newLayout;
 
+	// Generating corridor around the maze
+	{
+		for (int i = 0; i < limit; i++) //ensures the corridor generation
+		{
+			layout[1][i] = 1;
+			layout[limit - 2][i] = 1;
+			layout[i][1] = 1;
+			layout[i][limit - 2] = 1;
+		}
+		// fills in the border
+		layout[0][1] = 0;
+		layout[1][0] = 0;
+		layout[0][limit - 2] = 0;
+		layout[limit - 2][0] = 0;
+		layout[1][limit - 1] = 0;
+		layout[limit - 1][1] = 0;
+		layout[limit - 1][limit - 2] = 0;
+		layout[limit - 2][limit - 1] = 0;
+	}
+
 	if (generateCollisions) generateCollision();
 }
 
