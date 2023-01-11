@@ -1,7 +1,7 @@
 #pragma once
-#include <SDL.h>
-#include "../Pawn/Character.h"
 #include "../Math/Vector2D.h"
+
+class Character;
 
 enum BodyType 
 { 
@@ -12,8 +12,8 @@ enum BodyType
 class CollisionBody
 {
 public:
-	CollisionBody(bool isRigid, BodyType type) : rigid(isRigid), type(type) {}
-	CollisionBody(const Vector2D &pos, bool isRigid, BodyType type) : position(pos), rigid(isRigid), type(type) {}
+	CollisionBody(const bool isRigid, const BodyType type) : rigid(isRigid), type(type) {}
+	CollisionBody(const Vector2D &pos, const bool isRigid, const BodyType type) : position(pos), rigid(isRigid), type(type) {}
 
 	virtual ~CollisionBody() = default;
 
@@ -23,18 +23,15 @@ public:
 	
 	void setRigid(const bool rigid) { this->rigid = rigid; }
 
-	Character* getCharacter() const { return character; }
-
-	void setCharacter(Character* chr) { this->character = chr; }
-
 	Vector2D getFixedPosition() const { return position; }
 
 	BodyType getBodyType() const { return type; }
+	
+	Character* character = nullptr;
 
 protected:
-	bool rigid = true;
-	Character* character = nullptr;
 	Vector2D position;
+	bool rigid = true;
 	BodyType type;
 
 	const int SCREEN_WIDTH = 1200;

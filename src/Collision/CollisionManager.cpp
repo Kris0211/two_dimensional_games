@@ -3,6 +3,7 @@
 
 void CollisionManager::handleCollisions()
 {
+	int i = 0;
 	for (CollisionBody* collider : colliders)
 	{
 		if (collider->isRigid())
@@ -19,7 +20,8 @@ void CollisionManager::addCollider(CollisionBody* collisionBody)
 
 void CollisionManager::removeCollider(CollisionBody* collisionBody)
 {
-	colliders.erase(std::remove(colliders.begin(), colliders.end(), collisionBody), 
+	colliders.erase(std::remove(
+		colliders.begin(), colliders.end(), collisionBody), 
 		colliders.end());
 }
 

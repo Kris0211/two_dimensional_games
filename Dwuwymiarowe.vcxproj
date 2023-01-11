@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Level\LevelGenerator.cpp" />
     <ClCompile Include="src\Collision\Box.cpp" />
     <ClCompile Include="src\Collision\CollisionManager.cpp" />
     <ClCompile Include="src\Display\AnimSprite.cpp" />
@@ -26,23 +27,35 @@
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Camera\MultiplayerCamera.cpp" />
+    <ClCompile Include="src\Math\IntVector2D.cpp" />
+    <ClCompile Include="src\Pawn\ArrowsPlayer.cpp" />
     <ClCompile Include="src\Pawn\Character.cpp" />
     <ClCompile Include="src\Display\Sprite.cpp" />
     <ClCompile Include="src\Display\TileSet.cpp" />
     <ClCompile Include="src\Math\Vector2D.cpp" />
+    <ClCompile Include="src\Pawn\KeyboardPlayer.cpp" />
+    <ClCompile Include="src\Pawn\Target.cpp" />
+    <ClCompile Include="src\Display\TargetArrow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Level\LevelGenerator.h" />
     <ClInclude Include="src\Collision\Box.h" />
     <ClInclude Include="src\Collision\CollisionManager.h" />
     <ClInclude Include="src\Collision\CollisionBody.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="src\Display\AnimSprite.h" />
     <ClInclude Include="src\Collision\Ball.h" />
     <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Camera\MultiplayerCamera.h" />
+    <ClInclude Include="src\Math\IntVector2D.h" />
+    <ClInclude Include="src\Pawn\ArrowsPlayer.h" />
     <ClInclude Include="src\Pawn\Character.h" />
     <ClInclude Include="src\Display\Sprite.h" />
     <ClInclude Include="src\Display\TileSet.h" />
     <ClInclude Include="src\Math\Vector2D.h" />
+    <ClInclude Include="src\Pawn\KeyboardPlayer.h" />
+    <ClInclude Include="src\Pawn\Target.h" />
+    <ClInclude Include="src\Display\TargetArrow.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -1,7 +1,7 @@
 #include "ArrowsPlayer.h"
 
 ArrowsPlayer::ArrowsPlayer(Sprite* sprite, const Vector2D& pos, CollisionBody* collider)
-	: Character(sprite, pos, collider) {}
+	: Character(sprite, pos, collider) { charName = "Player2"; }
 
 void ArrowsPlayer::move(double deltaTime)
 {

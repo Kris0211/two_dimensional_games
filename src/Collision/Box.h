@@ -7,7 +7,7 @@ class Box : public CollisionBody
 public:
 	Box(const Vector2D &rect, bool isRigid);
 	Box(const Vector2D &fixedPos, const Vector2D &rect, bool isRigid);
-	~Box() override;
+	~Box() override = default;
 
 	void collide(bool separation = true, bool reflection = true) override;
 

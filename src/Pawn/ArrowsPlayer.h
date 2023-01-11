@@ -4,8 +4,7 @@
 class ArrowsPlayer : public Character
 {
 public:
-	ArrowsPlayer(Sprite* sprite, const Vector2D& pos, CollisionBody* collider);
+	ArrowsPlayer(Sprite* spr, const Vector2D& pos, CollisionBody* col);
 
 	void move(double deltaTime) override;
 };
-

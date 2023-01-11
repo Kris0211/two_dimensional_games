@@ -55,6 +55,17 @@ void Sprite::render(const int x, const int y, double scale, SDL_Renderer* render
 	SDL_RenderCopy(renderer, sprTexture, nullptr, &rect);
 }
 
+void Sprite::render(const int x, const int y, double scale, double angle, SDL_Renderer* renderer) const
+{
+	SDL_Rect rect;
+	rect.x = static_cast<int>((x - width * 0.5) * scale);
+	rect.y = static_cast<int>((y - height * 0.5) * scale);
+	rect.w = static_cast<int>(width * scale);
+	rect.h = static_cast<int>(height * scale);
+
+	SDL_RenderCopyEx(renderer, sprTexture, nullptr, &rect, angle, nullptr, SDL_FLIP_NONE);
+}
+
 int Sprite::getWidth() const { return width; }
 
 int Sprite::getHeight() const { return height; }

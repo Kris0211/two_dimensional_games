@@ -1,6 +1,5 @@
 #pragma once
 #include <SDL.h>
-
 #include "../Pawn/Character.h"
 #include "../Math/Vector2D.h"
 
@@ -17,11 +16,13 @@ public:
 	float getY() const;
 	double getZoom() const;
 
+	Vector2D getPosition() const;
+
 	void setMaxZoom(double newZoom);
 
 	void free();
 
-	void run(double delta);
+	void run();
 
 protected:
 	Character* trackedPlayer;

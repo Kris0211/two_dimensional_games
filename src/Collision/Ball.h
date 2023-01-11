@@ -9,10 +9,10 @@ class Ball : public CollisionBody
 {
 public:
 	Ball(float radius, bool isRigid);
-	Ball(Vector2D fixedPosition, float radius, bool isRigid);
-	~Ball() = default;
+	Ball(const Vector2D &fixedPosition, float radius, bool isRigid);
+	~Ball() override = default;
 
-	virtual void collide(bool separation = true, bool reflection = true) override;
+	void collide(bool separation = true, bool reflection = true) override;
 
 	float getRadius() const;
 

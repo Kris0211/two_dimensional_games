@@ -4,8 +4,7 @@
 class KeyboardPlayer : public Character
 {
 public:
-	KeyboardPlayer(Sprite* sprite, const Vector2D& pos, CollisionBody* collider);
+	KeyboardPlayer(Sprite* spr, const Vector2D& pos, CollisionBody* col);
 
 	void move(double deltaTime) override;
 };
-

@@ -1,5 +1,6 @@
 #include "MultiplayerCamera.h"
 #include "../Math/Vector2D.h"
+#include "../../Config.h"
 
 MultiplayerCamera::MultiplayerCamera()
 {
@@ -28,30 +29,14 @@ void MultiplayerCamera::free()
 	Camera::free();
 }
 
-void MultiplayerCamera::run(double delta)
+void MultiplayerCamera::run()
 {
 	int windowSizeX, windowSizeY;
 	SDL_GetWindowSize(window, &windowSizeX, &windowSizeY);
-
-	Vector2D windowRect(windowSizeX, windowSizeY);
-	Vector2D trackedPosition = (trackedPlayer->position + secondPlayer->position) * 0.5;
-
-	if (trackedPosition.y < position.y + static_cast<float>(windowSizeY) * 0.3f)
-	{
-		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.3f;
-	}
-
-	if (trackedPosition.y > position.y + static_cast<float>(windowSizeY) * 0.7f)
-	{
-		position.y = trackedPosition.y - static_cast<float>(windowSizeY) * 0.7f;
-	}
-
-	position.x = position.x + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.x);
-	//position.y = position.y + 0.03f * (trackedPosition.x - static_cast<float>(windowSizeX) * 0.5f - position.y);
-
-	zoom = (windowSizeY - 128) / (trackedPlayer->position - secondPlayer->position).length();
+		
+	zoom = (windowSizeY - TILE_SIZE) / (trackedPlayer->position - secondPlayer->position).length();
 	if (zoom > maxZoom) zoom = maxZoom;
-
+	
+	position = (trackedPlayer->position + secondPlayer->position) * 0.5;
+	position -= Vector2D(windowSizeX, windowSizeY) * 0.5 / zoom;
 }
-
-

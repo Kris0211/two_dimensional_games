@@ -1,6 +1,8 @@
 #include "Box.h"
+
 #include "Ball.h"
 #include "CollisionManager.h"
+#include "../Pawn/Character.h"
 
 Box::Box(const Vector2D &rect, bool isRigid) : CollisionBody(isRigid, BOX), rect(rect) {}
 
@@ -9,17 +11,14 @@ Box::Box(const Vector2D &fixedPos, const Vector2D &rect, bool isRigid)
 
 void Box::collide(bool separation, bool reflection)
 {
-	Ball* ballCollider;
-	Box* boxCollider;
-
 	for (CollisionBody* collider : CollisionManager::colliders)
 	{
 		if (collider == this) continue;
 
 		Vector2D colliderPos;
-		if (collider->getCharacter())
+		if (collider->character)
 		{
-			colliderPos = collider->getCharacter()->position;
+			colliderPos = collider->character->position;
 		}
 		else
 		{
@@ -28,58 +27,61 @@ void Box::collide(bool separation, bool reflection)
 
 		if (collider->getBodyType() == BALL)
 		{
-			ballCollider = static_cast<Ball*>(collider);
+			const Ball* ballCollider = dynamic_cast<Ball*>(collider);
 
-			Vector2D f = Vector2D::clamp(colliderPos, getCharacter()->position - rect * 0.5, getCharacter()->position + rect * 0.5);
+			Vector2D f = Vector2D::clamp(colliderPos, character->position - rect * 0.5, character->position + rect * 0.5);
 			if ((colliderPos - f).length() < ballCollider->getRadius())
 			{
-				if (collider->getCharacter()->position != f)
+				if (collider->character->position != f)
 				{
 					Vector2D vec = (colliderPos - f).normal() * (ballCollider->getRadius() - (colliderPos - f).length());
-					if (collider->isRigid() && collider->getCharacter() != nullptr)
+					if (collider->isRigid() && collider->character != nullptr)
 					{
-						getCharacter()->position -= vec * 0.5;
-						collider->getCharacter()->position += vec * 0.5;
+						character->position -= vec * 0.5;
+						collider->character->position += vec * 0.5;
 					}
 					else
 					{
-						getCharacter()->position -= vec;
+						character->position -= vec;
 					}
 				}
 
-				if (collider->getCharacter() != nullptr)
+				if (collider->character != nullptr)
 				{
-					getCharacter()->collision(collider->getCharacter());
+					character->collision(collider->character);
 				}
 			}
 		}
 		else // BodyType == BOX
 		{
-			boxCollider = dynamic_cast<Box*>(collider);
-			float left = (getCharacter()->position.x + rect.x * 0.5) - (colliderPos.x - boxCollider->getRect().x * 0.5);
-			float right = (colliderPos.x + boxCollider->getRect().x * 0.5) - (getCharacter()->position.x - rect.x * 0.5);
-			float top = (getCharacter()->position.y + rect.y * 0.5) - (colliderPos.y - boxCollider->getRect().y * 0.5);
-			float bottom = (colliderPos.y + boxCollider->getRect().y * 0.5) - (getCharacter()->position.y - rect.y * 0.5);
+			const Box* boxCollider = dynamic_cast<Box*>(collider);
+			const float left = character->position.x + rect.x * 0.5 - (colliderPos.x - boxCollider->getRect().x * 0.5);
+			const float right = colliderPos.x + boxCollider->getRect().x * 0.5 - (character->position.x - rect.x * 0.5);
+			const float top = character->position.y + rect.y * 0.5 - (colliderPos.y - boxCollider->getRect().y * 0.5);
+			const float bottom = colliderPos.y + boxCollider->getRect().y * 0.5 - (character->position.y - rect.y * 0.5);
 			if (left > 0 && right > 0 && top > 0 && bottom > 0)
 			{
 				Vector2D v = Vector2D(left < right ? -left : right, top < bottom ? -top : bottom);
+
 				if (abs(v.x) < abs(v.y)) v.y = 0;
 				else v.x = 0;
-				if (collider->isRigid() && collider->getCharacter())
+				if (collider->isRigid() && collider->character)
 				{
-					getCharacter()->position += v * 0.5;
-					collider->getCharacter()->position -= v * 0.5;
+					character->position += v * 0.5;
+					collider->character->position -= v * 0.5;
 				}
 				else
 				{
-					getCharacter()->position += v * 0.5;
+					character->position += v * 0.5;
 				}
 
-				if (collider->getCharacter() != nullptr)
+				if (collider->character != nullptr)
 				{
-					getCharacter()->collision(collider->getCharacter());
+					character->collision(collider->character);
 				}
 			}
 		}
 	}
 }
+
+Vector2D Box::getRect() const { return rect;}

@@ -1,7 +1,7 @@
 #include "KeyboardPlayer.h"
 
-KeyboardPlayer::KeyboardPlayer(Sprite* sprite, const Vector2D& pos, CollisionBody* collider) 
-	: Character(sprite, pos, collider) {}
+KeyboardPlayer::KeyboardPlayer(Sprite* spr, const Vector2D& pos, CollisionBody* col)
+	: Character(spr, pos, col) { charName = "Player1"; }
 
 void KeyboardPlayer::move(double deltaTime)
 {

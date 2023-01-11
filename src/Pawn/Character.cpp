@@ -23,6 +23,7 @@ Character::Character(Sprite* sprite, const Vector2D& pos, CollisionBody* collide
 	this->position = pos;
 	this->velocity = Vector2D(0, 0);
 	this->collider = collider;
+	collider->character = this;
 	CollisionManager::addCollider(this->collider);
 }
 
@@ -48,7 +49,7 @@ void Character::setSprite(Sprite* sprite) { this->sprite = sprite; }
 
 void Character::setCollider(CollisionBody* collider) { this->collider = collider; }
 
-void Character::setName(std::string name) { charName = name; }
+void Character::setName(const std::string &name) { charName = name; }
 
 std::string Character::getName() const { return charName; }
 
