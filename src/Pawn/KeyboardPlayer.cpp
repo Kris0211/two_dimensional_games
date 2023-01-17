@@ -31,6 +31,12 @@ void KeyboardPlayer::move(double deltaTime)
 	accel.y = velocity.y > 0 ? gravity * 2 : gravity;
 	onGround = false;
 	sinceLastJump += deltaTime;
+
+	if (position.y > 1200)
+	{
+		position = Vector2D(64.0f, 64.0f);
+		velocity = Vector2D(0.0f, 0.0f);
+	}
 }
 
 void KeyboardPlayer::collision()

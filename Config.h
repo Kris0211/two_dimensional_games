@@ -2,11 +2,11 @@
 #include <string>
 
 constexpr int TILE_SIZE = 64;
-constexpr int TILEMAP_WIDTH = 42;
-constexpr int TILEMAP_HEIGHT = 14;
+constexpr int TILEMAP_WIDTH = 85;
+constexpr int TILEMAP_HEIGHT = 12;
 constexpr int TOTAL_TILES = TILEMAP_WIDTH * TILEMAP_HEIGHT;
-constexpr int SCREEN_WIDTH = 1200;
-constexpr int SCREEN_HEIGHT = 800;
+constexpr int SCREEN_WIDTH = 800;
+constexpr int SCREEN_HEIGHT = 600;
 const std::string p1Name = "Player1";
 const std::string p2Name = "Player2";
 // ==Jump params== //

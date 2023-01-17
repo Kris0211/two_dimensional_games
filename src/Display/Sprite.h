@@ -27,5 +27,5 @@ protected:
 	int width;
 
 	int height;
-	
+		
 };

@@ -51,14 +51,31 @@ void TileSet::free()
 		sprite->free();
 		sprite = nullptr;
 	}
+	for (CollisionBody* c : colliders)
+	{
+		CollisionManager::removeCollider(c);
+		delete c;
+	}
+	colliders.clear();
 }
+
+Vector2D TileSet::getParallaxScale() const { return parallaxScale; }
+
+Vector2D TileSet::getParallaxOffset() const { return parallaxOffset; }
+
+void TileSet::setParallaxScale(const Vector2D& newScale) { parallaxScale = newScale; }
+
+void TileSet::setParallaxOffset(const Vector2D& newOffset) { parallaxOffset = newOffset; }
 
 void TileSet::render(SDL_Renderer* renderer, const Camera &cam) const
 {
 	for (int i = 0; i < width; i++)
 	{
 		for (int k = 0; k < height; k++) {
-			tileSprites[levelLayout[k][i]]->render(TILE_SIZE * i - cam.getX(), TILE_SIZE * k - cam.getY(), cam.getZoom(), renderer);
+			tileSprites[levelLayout[k][i]]->render(
+				TILE_SIZE * i - cam.getX() * parallaxScale.x + parallaxOffset.x, 
+				TILE_SIZE * k - cam.getY() * parallaxScale.y + parallaxOffset.y,
+				cam.getZoom(), renderer);
 		}
 	}
 }
@@ -69,19 +86,19 @@ void TileSet::generateCollision()
 	{
 		for (CollisionBody* c : colliders)
 		{
-			delete c;
 			CollisionManager::removeCollider(c);
+			delete c;
 		}
 		colliders.clear();
 	}
 
-	for (int y = 0; y < levelLayout.size(); y++)
+	for (unsigned long long y = 0; y < levelLayout.size(); y++)
 	{
-		for (int x = 0; x < levelLayout[y].size(); x++)
+		for (unsigned long long x = 0; x < levelLayout[y].size(); x++)
 		{
 			if (tileCollision[levelLayout[y][x]])
 			{
-				CollisionBody* c = new Box(Vector2D(x * TILE_SIZE, y * TILE_SIZE), Vector2D(TILE_SIZE, TILE_SIZE), false);
+				CollisionBody* c = new Box(Vector2D(x * TILE_SIZE + parallaxOffset.x, y * TILE_SIZE + parallaxOffset.y), Vector2D(TILE_SIZE, TILE_SIZE), false);
 				CollisionManager::addCollider(c);
 				colliders.push_back(c);
 			}
