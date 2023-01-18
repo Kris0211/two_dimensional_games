@@ -53,7 +53,7 @@ void KeyboardPlayer::calculatePhysics(const double height, const double range)
 	jumpRange = range;
 	jumpVelocity = -2.0 * speed * jumpHeight / jumpRange;
 	gravity = 2.0 * (speed * speed) * jumpHeight / (jumpRange * jumpRange);
-	std::cout << "Velocity: " << -jumpVelocity << "\nGravity: " << gravity << "\n";
+	//std::cout << "Velocity: " << -jumpVelocity << "\nGravity: " << gravity << "\n";
 }
 
 void KeyboardPlayer::jump()

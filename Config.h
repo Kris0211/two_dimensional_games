@@ -14,3 +14,6 @@ constexpr double JUMP_HEIGHT = 256;
 constexpr double JUMP_RANGE = 64;
 constexpr double JUMP_TIME = 400;
 constexpr double GRAVITY = 0.01;
+// ==Parallax== //
+constexpr double PARALLAX_BACKGROUND = 0.9;
+constexpr double PARALLAX_FOREGROUND = 1.2;

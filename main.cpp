@@ -22,6 +22,9 @@ double jumpHeight = JUMP_HEIGHT;
 double jumpRange = JUMP_RANGE;
 double jumpTime = JUMP_TIME;
 
+double parallaxFg = PARALLAX_FOREGROUND;
+double parallaxBg = PARALLAX_BACKGROUND;
+
 /**
  * \brief Initialize the game window
  * \return True on successful init, otherwise false
@@ -34,7 +37,7 @@ bool init()
 		return false;
 	}
 
-	window = SDL_CreateWindow("Zadanie 8", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Zadanie 9", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == nullptr)
 	{
 		printf("Failed to create a window! SDL Error: %s\n", SDL_GetError());
@@ -76,6 +79,9 @@ int main(int argc, char* argv[])
 	Sprite walterbox;
 	Sprite sky;
 	Sprite cobble;
+	Sprite cloudLeft;
+	Sprite cloudMid;
+	Sprite cloudRight;
 
 	if (!walterbox.loadFromFile("res/img/heisenberg_medium.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
@@ -91,14 +97,36 @@ int main(int argc, char* argv[])
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
+
+	if (!cloudLeft.loadFromFile("res/img/cloud_l.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!cloudMid.loadFromFile("res/img/cloud_m.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
+
+	if (!cloudRight.loadFromFile("res/img/cloud_r.png", defaultRenderer)) {
+		printf("Failed to load sprite texture!\n");
+		return -2;
+	}
 	
-	std::vector<Sprite*> tileMap = { &sky, &cobble, };
-	std::vector<bool> tileColliders = { false, true };
+	std::vector<Sprite*> gameplayTileMap = { &sky, &cobble, };
+	std::vector<bool> gameplayTileColliders = { false, true };
+
+	std::vector<Sprite*> cloudsTileMap = { &cloudLeft, &cloudMid, &cloudRight };
+	std::vector<bool> cloudsTileColliders = { false, false, false };
+
 		
 	KeyboardPlayer player1(&walterbox, Vector2D(128.0f, 128.0f), new Box(Vector2D(56.0f, 56.0f), true));
 
-	TileSet level(tileMap, tileColliders, "res/lvl/level.lvl");
+	TileSet level(gameplayTileMap, gameplayTileColliders, "res/lvl/level.lvl");
 	level.generateCollision();
+
+	TileSet clouds(cloudsTileMap, cloudsTileColliders, "res/lvl/clouds.lvl");
+	clouds.setParallaxOffset(Vector2D(-1512.0f, -128.0f));
 
 	Camera cam(&player1, window);
 
@@ -134,27 +162,27 @@ int main(int argc, char* argv[])
 				}
 				if (event.key.keysym.sym == SDLK_1)
 				{
-					jumpHeight += 32;
-					std::cout << "Jump height: " << jumpHeight << "\n";
-					player1.calculatePhysics(jumpHeight, jumpRange);
+					parallaxFg += 0.1;
+					std::cout << "Parallax Foreground: " << parallaxFg << "\n";
+					//foreground.parallaxScale.x = paralaxFg;
 				}
 				if (event.key.keysym.sym == SDLK_2)
 				{
-					jumpHeight -= 32;
-					std::cout << "Jump height: " << jumpHeight << "\n";
-					player1.calculatePhysics(jumpHeight, jumpRange);
+					parallaxFg -= 0.1;
+					std::cout << "Parallax Foreground: " << parallaxFg << "\n";
+					//foreground.parallaxScale.x = paralaxFg;
 				}
 				if (event.key.keysym.sym == SDLK_3)
 				{
-					jumpRange += 8;
-					std::cout << "Jump range: " << jumpRange << "\n";
-					player1.calculatePhysics(jumpHeight, jumpRange);
+					parallaxBg += 0.1;
+					std::cout << "Parallax Background: " << parallaxBg << "\n";
+					//background.parallaxScale.x = paralaxBg;
 				}
 				if (event.key.keysym.sym == SDLK_4)
 				{
-					jumpRange -= 8;
-					std::cout << "Jump range: " << jumpRange << "\n";
-					player1.calculatePhysics(jumpHeight, jumpRange);
+					parallaxBg -= 0.1;
+					std::cout << "Parallax Background: " << parallaxBg << "\n";
+					//background.parallaxScale.x = paralaxBg;
 				}
 				if (event.key.keysym.sym == SDLK_r)
 				{
