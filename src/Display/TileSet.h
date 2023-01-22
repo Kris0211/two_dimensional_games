@@ -11,7 +11,7 @@ class Camera;
 class TileSet
 {
 public:
-	TileSet(const std::vector<Sprite*> &tileSet, const std::vector<bool> &tileCollision, std::string pathTo);
+	TileSet(const std::vector<Sprite*> &tileSet, const std::vector<bool> &tileCollision, const char* pathTo);
 	
 	void render(SDL_Renderer* renderer, const Camera &cam) const;
 
@@ -29,10 +29,9 @@ public:
 	std::vector<bool> tileCollision;
 
 private:
-	std::vector<Sprite*> tileSprites;
 	std::vector<std::vector<uint8_t>> levelLayout;
-	int width;
-	int height;
+	std::vector<Sprite*> tileSprites;
+	
 	Vector2D parallaxScale = Vector2D(1.0f, 1.0f);
 	Vector2D parallaxOffset;
 };

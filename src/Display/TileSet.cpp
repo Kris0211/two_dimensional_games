@@ -2,46 +2,57 @@
 #include "../Collision/CollisionManager.h"
 #include "../Collision/Box.h"
 #include <fstream>
+#include <iostream>
+#include <map>
 
-TileSet::TileSet(const std::vector<Sprite*> &tiles, const std::vector<bool>& tileCollision, std::string pathTo)
+TileSet::TileSet(const std::vector<Sprite*> &tiles, const std::vector<bool>& tileCollision, const char* pathTo)
 {
-	this->width = TILEMAP_WIDTH;
-	this->height = TILEMAP_HEIGHT;
 	this->tileCollision = tileCollision;
+	this->parallaxScale = Vector2D(1, 1);
 
 	for (Sprite* sprite : tiles)
 	{
 		tileSprites.push_back(sprite);
 	}
 
-	std::ifstream level(pathTo);
-	if (level.good())
+	std::ifstream level;
+	level.open(pathTo);
+	if (level.is_open())
 	{
-		std::string col;
-		while (std::getline(level, col))
+		std::string line;
+		std::map<char, uint8_t> symbols;
+
+		int symbolSize;
+		level >> symbolSize;
+
+		getline(level, line);
+		getline(level, line);
+		for (int i = 0; i < symbolSize; i++)
+		{
+			symbols.emplace(line[i], i);
+		}
+		
+		while (getline(level, line))
 		{
 			std::vector<uint8_t> row;
-			for (char chr : col)
+			for (char c : line)
 			{
-				switch (chr)
+				auto it = symbols.find(c);
+				if (it != symbols.end())
 				{
-					case '.':
-					{
-						row.push_back(0);
-						break;
-					}
-					case '+':
-					{
-						row.push_back(1);
-						break;
-					}
-				default: break;
+					row.push_back(it->second);
+				}
+				else
+				{
+					row.push_back(-1); // Mark unknown/invalid symbols with -1
 				}
 			}
 			levelLayout.push_back(row);
+			std::cout << "\n";
 		}
+		level.close();
 	}
-	else printf("Error loading level!\n");
+	else std::cout <<"Error loading level \"" << pathTo << "\"!\n";
 }
 
 void TileSet::free()
@@ -69,13 +80,19 @@ void TileSet::setParallaxOffset(const Vector2D& newOffset) { parallaxOffset = ne
 
 void TileSet::render(SDL_Renderer* renderer, const Camera &cam) const
 {
-	for (int i = 0; i < width; i++)
+	const uint8_t tileSetSize = tileSprites.size();
+	Vector2D cameraPos(cam.getX(), cam.getY());
+	for (unsigned long long i = 0; i < levelLayout.size(); i++)
 	{
-		for (int k = 0; k < height; k++) {
-			tileSprites[levelLayout[k][i]]->render(
-				TILE_SIZE * i - cam.getX() * parallaxScale.x + parallaxOffset.x, 
-				TILE_SIZE * k - cam.getY() * parallaxScale.y + parallaxOffset.y,
-				cam.getZoom(), renderer);
+		for (unsigned long long k = 0; k < levelLayout[i].size(); k++)
+		{
+			const uint8_t tile = levelLayout[i][k];
+			if (tile < 0 || tile > tileSetSize) continue; // We are not checking if tile_id = -1 because sometimes it's 255 and no one knows why
+			tileSprites[tile]->render(
+				TILE_SIZE * k - cam.getX() * parallaxScale.x + parallaxOffset.x,
+				TILE_SIZE * i - cam.getY() * parallaxScale.y + parallaxOffset.y,
+				cam.getZoom(), renderer
+			);
 		}
 	}
 }
@@ -92,13 +109,15 @@ void TileSet::generateCollision()
 		colliders.clear();
 	}
 
-	for (unsigned long long y = 0; y < levelLayout.size(); y++)
+	for (unsigned long long i = 0; i < levelLayout.size(); i++)
 	{
-		for (unsigned long long x = 0; x < levelLayout[y].size(); x++)
+		for (unsigned long long k = 0; k < levelLayout[i].size(); k++)
 		{
-			if (tileCollision[levelLayout[y][x]])
+			if (tileCollision[levelLayout[i][k]])
 			{
-				CollisionBody* c = new Box(Vector2D(x * TILE_SIZE + parallaxOffset.x, y * TILE_SIZE + parallaxOffset.y), Vector2D(TILE_SIZE, TILE_SIZE), false);
+				CollisionBody* c = new Box(
+					Vector2D(k * TILE_SIZE + parallaxOffset.x, i * TILE_SIZE + parallaxOffset.y), 
+					Vector2D(TILE_SIZE, TILE_SIZE), false);
 				CollisionManager::addCollider(c);
 				colliders.push_back(c);
 			}

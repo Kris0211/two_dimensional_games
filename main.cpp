@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 
 #include "src/Collision/Box.h"
+#include "src/Display/AnimSprite.h"
 #include "src/Display/Sprite.h"
 #include "src/Display/TileSet.h"
 #include "src/Math/Vector2D.h"
@@ -119,14 +120,13 @@ int main(int argc, char* argv[])
 	std::vector<Sprite*> cloudsTileMap = { &cloudLeft, &cloudMid, &cloudRight };
 	std::vector<bool> cloudsTileColliders = { false, false, false };
 
-		
 	KeyboardPlayer player1(&walterbox, Vector2D(128.0f, 128.0f), new Box(Vector2D(56.0f, 56.0f), true));
 
 	TileSet level(gameplayTileMap, gameplayTileColliders, "res/lvl/level.lvl");
 	level.generateCollision();
 
-	TileSet clouds(cloudsTileMap, cloudsTileColliders, "res/lvl/clouds.lvl");
-	clouds.setParallaxOffset(Vector2D(-1512.0f, -128.0f));
+	//TileSet clouds(cloudsTileMap, cloudsTileColliders, "res/lvl/clouds.lvl");
+	//clouds.setParallaxOffset(Vector2D(-1512.0f, -128.0f));
 
 	Camera cam(&player1, window);
 
