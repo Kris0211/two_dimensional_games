@@ -23,8 +23,8 @@ double jumpHeight = JUMP_HEIGHT;
 double jumpRange = JUMP_RANGE;
 double jumpTime = JUMP_TIME;
 
-double parallaxFg = PARALLAX_FOREGROUND;
-double parallaxBg = PARALLAX_BACKGROUND;
+float parallaxFg = PARALLAX_FOREGROUND;
+float parallaxBg = PARALLAX_BACKGROUND;
 
 /**
  * \brief Initialize the game window
@@ -78,18 +78,17 @@ int main(int argc, char* argv[])
 	}
 	
 	Sprite walterbox;
-	Sprite sky;
+	Sprite bg;
 	Sprite cobble;
-	Sprite cloudLeft;
-	Sprite cloudMid;
-	Sprite cloudRight;
+	Sprite lava;
+	Sprite nic;
 
 	if (!walterbox.loadFromFile("res/img/heisenberg_medium.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!sky.loadFromFile("res/img/sky.png", defaultRenderer)) {
+	if (!bg.loadFromFile("res/img/bg.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
@@ -99,30 +98,34 @@ int main(int argc, char* argv[])
 		return -2;
 	}
 
-	if (!cloudLeft.loadFromFile("res/img/cloud_l.png", defaultRenderer)) {
+	if (!nic.loadFromFile("res/img/nothing.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
 
-	if (!cloudMid.loadFromFile("res/img/cloud_m.png", defaultRenderer)) {
+	if (!lava.loadFromFile("res/img/lava.png", defaultRenderer)) {
 		printf("Failed to load sprite texture!\n");
 		return -2;
 	}
-
-	if (!cloudRight.loadFromFile("res/img/cloud_r.png", defaultRenderer)) {
-		printf("Failed to load sprite texture!\n");
-		return -2;
-	}
-	
-	std::vector<Sprite*> gameplayTileMap = { &sky, &cobble, };
+		
+	std::vector<Sprite*> gameplayTileMap = { &nic, &cobble, };
 	std::vector<bool> gameplayTileColliders = { false, true };
 
-	std::vector<Sprite*> cloudsTileMap = { &cloudLeft, &cloudMid, &cloudRight };
-	std::vector<bool> cloudsTileColliders = { false, false, false };
+	std::vector<Sprite*> backgroundTileMap = { &bg };
+	std::vector<Sprite*> foregroundTileMap = { &lava };
 
 	KeyboardPlayer player1(&walterbox, Vector2D(128.0f, 128.0f), new Box(Vector2D(56.0f, 56.0f), true));
 
 	TileSet level(gameplayTileMap, gameplayTileColliders, "res/lvl/level.lvl");
+	TileSet background(backgroundTileMap, { false }, "res/lvl/bg.lvl");
+	TileSet foreground(foregroundTileMap, { false }, "res/lvl/fg.lvl");
+
+	background.setParallaxScale(Vector2D(0.7f, 0.7f));
+	foreground.setParallaxScale(Vector2D(1.3f, 1.3f));
+	background.setParallaxOffset(Vector2D(-320.0f, -256.0f));
+	foreground.setParallaxOffset(Vector2D(-448.0f, 768.0f));
+
+	// We do not generate collision for fg or bg because it's not needed
 	level.generateCollision();
 
 	//TileSet clouds(cloudsTileMap, cloudsTileColliders, "res/lvl/clouds.lvl");
@@ -162,27 +165,35 @@ int main(int argc, char* argv[])
 				}
 				if (event.key.keysym.sym == SDLK_1)
 				{
-					parallaxFg += 0.1;
+					parallaxFg += 0.1f;
 					std::cout << "Parallax Foreground: " << parallaxFg << "\n";
-					//foreground.parallaxScale.x = paralaxFg;
+					Vector2D newScale = foreground.getParallaxScale();
+					newScale.x = parallaxFg;
+					foreground.setParallaxScale(newScale);
 				}
 				if (event.key.keysym.sym == SDLK_2)
 				{
-					parallaxFg -= 0.1;
+					parallaxFg -= 0.1f;
 					std::cout << "Parallax Foreground: " << parallaxFg << "\n";
-					//foreground.parallaxScale.x = paralaxFg;
+					Vector2D newScale = foreground.getParallaxScale();
+					newScale.x = parallaxFg;
+					foreground.setParallaxScale(newScale);
 				}
 				if (event.key.keysym.sym == SDLK_3)
 				{
-					parallaxBg += 0.1;
+					parallaxBg += 0.1f;
 					std::cout << "Parallax Background: " << parallaxBg << "\n";
-					//background.parallaxScale.x = paralaxBg;
+					Vector2D newScale = background.getParallaxScale();
+					newScale.x = parallaxBg;
+					background.setParallaxScale(newScale);
 				}
 				if (event.key.keysym.sym == SDLK_4)
 				{
-					parallaxBg -= 0.1;
+					parallaxBg -= 0.1f;
 					std::cout << "Parallax Background: " << parallaxBg << "\n";
-					//background.parallaxScale.x = paralaxBg;
+					Vector2D newScale = background.getParallaxScale();
+					newScale.x = parallaxBg;
+					background.setParallaxScale(newScale);
 				}
 				if (event.key.keysym.sym == SDLK_r)
 				{
@@ -201,10 +212,14 @@ int main(int argc, char* argv[])
 		CollisionManager::handleCollisions();
 
 		//Render level
+		background.render(defaultRenderer, cam);
 		level.render(defaultRenderer, cam);
 
 		//Render players
 		player1.render(defaultRenderer, cam);
+
+		// Render lava
+		foreground.render(defaultRenderer, cam);
 				
 		//Updates screen after render
 		SDL_RenderPresent(defaultRenderer);
@@ -213,9 +228,10 @@ int main(int argc, char* argv[])
 	// Clean up before closing
 	cam.free();
 	player1.free();
-
+	
 	walterbox.free();
-	sky.free();
+	nic.free();
+	lava.free();
 	cobble.free();
 
 	close();

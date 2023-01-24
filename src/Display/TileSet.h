@@ -34,4 +34,7 @@ private:
 	
 	Vector2D parallaxScale = Vector2D(1.0f, 1.0f);
 	Vector2D parallaxOffset;
+
+	int width;
+	int height;
 };

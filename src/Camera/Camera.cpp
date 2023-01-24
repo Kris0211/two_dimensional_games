@@ -42,12 +42,12 @@ void Camera::run()
 	int windowSizeX, windowSizeY;
 	SDL_GetWindowSize(window, &windowSizeX, &windowSizeY);
 
-	if (trackedPlayer->position.x < position.x + static_cast<float>(windowSizeX) * 0.3f) {
-		position.x = trackedPlayer->position.x - static_cast<float>(windowSizeX) * 0.3f;
+	if (trackedPlayer->position.x < position.x + static_cast<float>(windowSizeX) * 0.4f) {
+		position.x = trackedPlayer->position.x - static_cast<float>(windowSizeX) * 0.4f;
 	}
 
-	if (trackedPlayer->position.x > position.x + static_cast<float>(windowSizeX) * 0.7f) {
-		position.x = trackedPlayer->position.x - static_cast<float>(windowSizeX) * 0.7f;
+	if (trackedPlayer->position.x > position.x + static_cast<float>(windowSizeX) * 0.6f) {
+		position.x = trackedPlayer->position.x - static_cast<float>(windowSizeX) * 0.6f;
 	}
 	
 	position.y = position.y + 0.04f * (trackedPlayer->position.y - static_cast<float>(windowSizeY) * 0.5f - position.y);

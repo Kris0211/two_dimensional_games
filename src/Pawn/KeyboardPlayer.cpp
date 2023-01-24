@@ -32,7 +32,7 @@ void KeyboardPlayer::move(double deltaTime)
 	onGround = false;
 	sinceLastJump += deltaTime;
 
-	if (position.y > 1200)
+	if (position.y > 1000)
 	{
 		position = Vector2D(64.0f, 64.0f);
 		velocity = Vector2D(0.0f, 0.0f);

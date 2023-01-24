@@ -32,6 +32,7 @@ TileSet::TileSet(const std::vector<Sprite*> &tiles, const std::vector<bool>& til
 			symbols.emplace(line[i], i);
 		}
 		
+		bool passed = false;
 		while (getline(level, line))
 		{
 			std::vector<uint8_t> row;
@@ -46,13 +47,17 @@ TileSet::TileSet(const std::vector<Sprite*> &tiles, const std::vector<bool>& til
 				{
 					row.push_back(-1); // Mark unknown/invalid symbols with -1
 				}
+				if (!passed) width++;
 			}
+			passed = true;
 			levelLayout.push_back(row);
-			std::cout << "\n";
+			height++;
 		}
 		level.close();
 	}
 	else std::cout <<"Error loading level \"" << pathTo << "\"!\n";
+
+	std::cout << "Width: " << width << "\nHeight: " << height << std::endl;
 }
 
 void TileSet::free()
